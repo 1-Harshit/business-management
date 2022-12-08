@@ -1,6 +1,6 @@
-import { Tooltip, TooltipProps, tooltipClasses, styled } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
+import { Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material"
+import Image from "next/image"
+import Link from "next/link"
 
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
@@ -12,8 +12,8 @@ const LogoWrapper = styled(Link)(
     font-weight: ${theme.typography.fontWeightBold};
     align-items: center;
     justify-content: center;
-    `,
-);
+    `
+)
 
 const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -32,21 +32,19 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
   [`& .${tooltipClasses.arrow}`]: {
     color: theme.colors.alpha.trueWhite[100],
   },
-}));
+}))
 
-function Logo() {
-  return (
-    <TooltipWrapper title="Pole Star Enterprises" arrow>
-      <LogoWrapper href="/">
-        <Image
-          alt="logo"
-          src="/static/images/logo.svg"
-          width={110}
-          height={110}
-        />
-      </LogoWrapper>
-    </TooltipWrapper>
-  );
-}
+const Logo = () => (
+  <TooltipWrapper title="Pole Star Enterprises" arrow>
+    <LogoWrapper href="/">
+      <Image
+        alt="logo"
+        src="/static/images/logo.svg"
+        width={110}
+        height={110}
+      />
+    </LogoWrapper>
+  </TooltipWrapper>
+)
 
-export default Logo;
+export default Logo

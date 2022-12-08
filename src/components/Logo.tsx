@@ -1,28 +1,28 @@
-import { Box, styled, Tooltip } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
+import { Box, Tooltip, styled } from "@mui/material"
+import Image from "next/image"
+import Link from "next/link"
 
 const LogoWrapper = styled(Link)(
-	({ theme }) => `
+  ({ theme }) => `
         color: ${theme.palette.text.primary};
         padding: ${theme.spacing(0, 1, 0, 0)};
         display: flex;
         text-decoration: none;
         font-weight: ${theme.typography.fontWeightBold};
-`,
-);
+`
+)
 
 const LogoSignWrapper = styled(Box)(
-	() => `
+  () => `
         width: 52px;
         height: 38px;
         margin-top: 4px;
         transform: scale(.8);
-`,
-);
+`
+)
 
 const LogoSign = styled(Box)(
-	({ theme }) => `
+  ({ theme }) => `
         background: ${theme.general.reactFrameworkColor};
         width: 18px;
         height: 18px;
@@ -55,11 +55,11 @@ const LogoSign = styled(Box)(
         &:after {
             background: ${theme.palette.secondary.main};
         }
-`,
-);
+`
+)
 
 const LogoSignInner = styled(Box)(
-	({ theme }) => `
+  ({ theme }) => `
         width: 16px;
         height: 16px;
         position: absolute;
@@ -68,17 +68,17 @@ const LogoSignInner = styled(Box)(
         z-index: 5;
         border-radius: ${theme.general.borderRadiusSm};
         background: ${theme.header.background};
-`,
-);
+`
+)
 
 const LogoTextWrapper = styled(Box)(
-	({ theme }) => `
+  ({ theme }) => `
         padding-left: ${theme.spacing(1)};
-`,
-);
+`
+)
 
 const VersionBadge = styled(Box)(
-	({ theme }) => `
+  ({ theme }) => `
         background: ${theme.palette.success.main};
         color: ${theme.palette.success.contrastText};
         padding: ${theme.spacing(0.4, 1)};
@@ -87,38 +87,36 @@ const VersionBadge = styled(Box)(
         display: inline-block;
         line-height: 1;
         font-size: ${theme.typography.pxToRem(11)};
-`,
-);
+`
+)
 
 const LogoText = styled(Box)(
-	({ theme }) => `
+  ({ theme }) => `
         font-size: ${theme.typography.pxToRem(15)};
         font-weight: ${theme.typography.fontWeightBold};
-`,
-);
+`
+)
 
-function Logo() {
-	return (
-		<LogoWrapper href="/">
-			<Image alt="logo" src="/static/images/logo.svg" width={85} height={85} />
-			<Box
-				component="span"
-				sx={{
-					display: { xs: "none", sm: "inline-block" },
-				}}
-			>
-				<LogoTextWrapper>
-					<Tooltip title="Version 1.0" arrow placement="right">
-						<VersionBadge>1.0</VersionBadge>
-					</Tooltip>
-					<LogoText>
-						Pole Star Enterprises&apos; <br />
-						Business Management
-					</LogoText>
-				</LogoTextWrapper>
-			</Box>
-		</LogoWrapper>
-	);
-}
+const Logo = () => (
+  <LogoWrapper href="/">
+    <Image alt="logo" src="/static/images/logo.svg" width={85} height={85} />
+    <Box
+      component="span"
+      sx={{
+        display: { xs: "none", sm: "inline-block" },
+      }}
+    >
+      <LogoTextWrapper>
+        <Tooltip title="Version 1.0" arrow placement="right">
+          <VersionBadge>1.0</VersionBadge>
+        </Tooltip>
+        <LogoText>
+          Pole Star Enterprises&apos; <br />
+          Business Management
+        </LogoText>
+      </LogoTextWrapper>
+    </Box>
+  </LogoWrapper>
+)
 
-export default Logo;
+export default Logo
