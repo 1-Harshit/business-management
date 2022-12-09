@@ -39,7 +39,7 @@
 				"semi": false
 			}
 		],
-		"indent": ["error", 2],
+		// "indent": ["error", 2],
 		"semi": ["error", "never"],
 		"jsx-a11y/label-has-associated-control": [
 			"error",
