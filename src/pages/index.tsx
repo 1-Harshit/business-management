@@ -2,9 +2,7 @@ import {
   Box,
   Button,
   Container,
-  Grid,
   Hidden,
-  Icon,
   Typography,
   styled,
   useMediaQuery,
@@ -13,7 +11,6 @@ import {
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
-import AddIcon from "@mui/icons-material/Add"
 
 import Footer from "src/components/Footer"
 
@@ -34,7 +31,6 @@ const MainContent = styled(Box)(
 )
 
 const Home = () => {
-  // media query
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   return (

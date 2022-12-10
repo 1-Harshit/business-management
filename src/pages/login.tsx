@@ -13,9 +13,9 @@ import {
   OutlinedInput,
   TextField,
   Typography,
+  styled,
 } from "@mui/material"
 import { LoadingButton } from "@mui/lab"
-import { styled } from "@mui/material/styles"
 import Image from "next/image"
 import Head from "next/head"
 import Link from "next/link"
@@ -168,7 +168,9 @@ const Login = () => {
                       disabled={loading}
                     />
                     <FormControl variant="outlined" fullWidth>
-                      <InputLabel htmlFor="login-password">Password</InputLabel>
+                      <InputLabel htmlFor="login-password" disabled={loading}>
+                        Password
+                      </InputLabel>
                       <OutlinedInput
                         id="login-password"
                         type={values.showPassword ? "text" : "password"}

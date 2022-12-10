@@ -5,8 +5,8 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  styled,
 } from "@mui/material"
-import { styled } from "@mui/material/styles"
 import FacebookIcon from "@mui/icons-material/Facebook"
 import TwitterIcon from "@mui/icons-material/Twitter"
 import InstagramIcon from "@mui/icons-material/Instagram"
@@ -17,14 +17,14 @@ import Logo from "src/components/LogoSign"
 
 const MainContent = styled(Box)(
   () => `
-      height: 100vh;
-      display: flex;
-      flex: 1;
-      overflow: auto;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-  `
+    height: 100vh;
+    display: flex;
+    flex: 1;
+    overflow: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`
 )
 
 const StatusMaintenance = () => (

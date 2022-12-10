@@ -18,12 +18,12 @@ import SidebarMenu from "./SidebarMenu"
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
-        width: ${theme.sidebar.width};
-        min-width: ${theme.sidebar.width};
-        color: ${theme.colors.alpha.trueWhite[70]};
-        position: relative;
-        z-index: 7;
-        height: 100%;
+    width: ${theme.sidebar.width};
+    min-width: ${theme.sidebar.width};
+    color: ${theme.colors.alpha.trueWhite[70]};
+    position: relative;
+    z-index: 7;
+    height: 100%;
 `
 )
 

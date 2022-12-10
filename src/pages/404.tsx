@@ -5,16 +5,15 @@ import Head from "next/head"
 
 const MainContent = styled(Box)(
   ({ theme }) => `
-      height: 100vh;
-      display: flex;
-      flex: 1;
-      overflow: auto;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: ${theme.spacing(30)}px;
-      
-  `
+    height: 100vh;
+    display: flex;
+    flex: 1;
+    overflow: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: ${theme.spacing(30)}px;
+`
 )
 
 const Status404 = () => (
@@ -47,24 +46,24 @@ const Status404 = () => (
         <Container maxWidth="sm">
           <Card sx={{ textAlign: "center", mt: 3, p: 4 }}>
             {/* <FormControl variant="outlined" fullWidth>
-								<OutlinedInputWrapper
-									type="text"
-									placeholder="Search terms here..."
-									endAdornment={
-										<InputAdornment position="end">
-											<ButtonSearch variant="contained" size="small">
-												Search
-											</ButtonSearch>
-										</InputAdornment>
-									}
-									startAdornment={
-										<InputAdornment position="start">
-											<SearchTwoToneIcon />
-										</InputAdornment>
-									}
-								/>
-							</FormControl>
-							<Divider sx={{ my: 4 }}>OR</Divider> */}
+              <OutlinedInputWrapper
+                type="text"
+                placeholder="Search terms here..."
+                endAdornment={
+                  <InputAdornment position="end">
+                    <ButtonSearch variant="contained" size="small">
+                      Search
+                    </ButtonSearch>
+                  </InputAdornment>
+                }
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchTwoToneIcon />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <Divider sx={{ my: 4 }}>OR</Divider> */}
             <Button href="/" variant="outlined">
               Go to homepage
             </Button>
