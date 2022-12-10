@@ -6,7 +6,7 @@ import Footer from "src/components/Footer"
 import Sidebar from "./components/Sidebar"
 import Header from "./components/Header"
 
-interface SidebarLayoutProps {
+export interface SidebarLayoutProps {
   children: ReactNode
 }
 

@@ -7,10 +7,11 @@ import { FC } from "react"
 import { SidebarProvider } from "src/contexts/SidebarContext"
 import EmptyLayout from "src/layouts/EmptyLayout"
 import ThemeProviderWrapper from "src/theme/ThemeProvider"
+import { SidebarLayoutProps } from "src/layouts/SidebarLayout"
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  layout?: FC
+  layout?: FC<SidebarLayoutProps>
 }
 
 type AppPropsWithLayout = AppProps & {
