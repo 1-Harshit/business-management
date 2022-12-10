@@ -1,8 +1,10 @@
 import { FC, ReactNode } from "react"
 import { Box, alpha, lighten, useTheme } from "@mui/material"
 
-import Sidebar from "./Sidebar"
-// import Header from "./Header"
+import Footer from "src/components/Footer"
+
+import Sidebar from "./components/Sidebar"
+import Header from "./components/Header"
 
 interface SidebarLayoutProps {
   children: ReactNode
@@ -16,7 +18,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
       sx={{
         flex: 1,
         height: "100%",
-
+        overflow: "hidden",
         ".MuiPageTitle-wrapper": {
           background:
             theme.palette.mode === "dark"
@@ -39,7 +41,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
         },
       }}
     >
-      {/* <Header /> */}
+      <Header />
       <Sidebar />
       <Box
         sx={{
@@ -54,6 +56,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
         }}
       >
         <Box display="block">{children}</Box>
+        <Footer />
       </Box>
     </Box>
   )

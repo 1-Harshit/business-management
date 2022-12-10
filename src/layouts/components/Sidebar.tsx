@@ -1,10 +1,8 @@
 import { useContext } from "react"
 import {
   Box,
-  Button,
   Divider,
   Drawer,
-  Tooltip,
   alpha,
   darken,
   lighten,
@@ -13,7 +11,7 @@ import {
 } from "@mui/material"
 
 import Scrollbar from "src/components/Scrollbar"
-import Logo from "src/components/LogoSign"
+import Logo from "src/components/Logo"
 import { SidebarContext } from "src/contexts/SidebarContext"
 
 import SidebarMenu from "./SidebarMenu"
@@ -26,7 +24,6 @@ const SidebarWrapper = styled(Box)(
         position: relative;
         z-index: 7;
         height: 100%;
-        padding-bottom: 68px;
 `
 )
 
@@ -55,43 +52,20 @@ const Sidebar = () => {
         }}
       >
         <Scrollbar>
-          <Box mt={3}>
-            <Box
-              mx={2}
-              sx={{
-                width: 52,
-              }}
-            >
+          <Box mt={2}>
+            <Box mx={1}>
               <Logo />
             </Box>
           </Box>
           <Divider
             sx={{
-              mt: theme.spacing(3),
-              mx: theme.spacing(2),
+              mt: theme.spacing(2),
+              mx: theme.spacing(1),
               background: theme.colors.alpha.trueWhite[10],
             }}
           />
           <SidebarMenu />
         </Scrollbar>
-        <Divider
-          sx={{
-            background: theme.colors.alpha.trueWhite[10],
-          }}
-        />
-        <Box p={2}>
-          <Button
-            href="https://bloomui.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="contained"
-            color="warning"
-            size="small"
-            fullWidth
-          >
-            Upgrade to PRO
-          </Button>
-        </Box>
       </SidebarWrapper>
       <Drawer
         sx={{
@@ -113,12 +87,7 @@ const Sidebar = () => {
         >
           <Scrollbar>
             <Box mt={3}>
-              <Box
-                mx={2}
-                sx={{
-                  width: 52,
-                }}
-              >
+              <Box mx={2}>
                 <Logo />
               </Box>
             </Box>
