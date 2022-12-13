@@ -3,6 +3,8 @@ import type { AppProps } from "next/app"
 import { CssBaseline } from "@mui/material"
 import { NextPage } from "next"
 import { FC } from "react"
+import { LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 
 import { SidebarProvider } from "src/contexts/SidebarContext"
 import EmptyLayout from "src/layouts/EmptyLayout"
@@ -23,10 +25,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <SidebarProvider>
       <ThemeProviderWrapper>
-        <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <CssBaseline />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </LocalizationProvider>
       </ThemeProviderWrapper>
     </SidebarProvider>
   )
