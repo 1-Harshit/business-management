@@ -10,7 +10,6 @@ import {
   useTheme,
 } from "@mui/material"
 
-import Scrollbar from "src/components/Scrollbar"
 import Logo from "src/components/Logo"
 import { SidebarContext } from "src/contexts/SidebarContext"
 
@@ -51,21 +50,19 @@ const Sidebar = () => {
             theme.palette.mode === "dark" ? theme.sidebar.boxShadow : "none",
         }}
       >
-        <Scrollbar>
-          <Box mt={2}>
-            <Box mx={1}>
-              <Logo />
-            </Box>
+        <Box mt={2}>
+          <Box mx={1}>
+            <Logo />
           </Box>
-          <Divider
-            sx={{
-              mt: theme.spacing(2),
-              mx: theme.spacing(1),
-              background: theme.colors.alpha.trueWhite[10],
-            }}
-          />
-          <SidebarMenu />
-        </Scrollbar>
+        </Box>
+        <Divider
+          sx={{
+            mt: theme.spacing(2),
+            mx: theme.spacing(1),
+            background: theme.colors.alpha.trueWhite[10],
+          }}
+        />
+        <SidebarMenu />
       </SidebarWrapper>
       <Drawer
         sx={{
@@ -85,21 +82,19 @@ const Sidebar = () => {
                 : darken(theme.colors.alpha.black[100], 0.5),
           }}
         >
-          <Scrollbar>
-            <Box mt={3}>
-              <Box mx={2}>
-                <Logo />
-              </Box>
+          <Box mt={3}>
+            <Box mx={2}>
+              <Logo />
             </Box>
-            <Divider
-              sx={{
-                mt: theme.spacing(3),
-                mx: theme.spacing(2),
-                background: theme.colors.alpha.trueWhite[10],
-              }}
-            />
-            <SidebarMenu />
-          </Scrollbar>
+          </Box>
+          <Divider
+            sx={{
+              mt: theme.spacing(3),
+              mx: theme.spacing(2),
+              background: theme.colors.alpha.trueWhite[10],
+            }}
+          />
+          <SidebarMenu />
         </SidebarWrapper>
       </Drawer>
     </>
