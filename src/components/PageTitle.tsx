@@ -8,13 +8,15 @@ import PageTitleWrapper from "./PageTitleWrapper"
 interface PageTitleProps {
   heading?: string
   subHeading?: string
-  docs?: string
+  sideText?: string
+  sideTextLink?: string
 }
 
 const PageTitle: FC<PageTitleProps> = ({
   heading = "",
   subHeading = "",
-  docs = "",
+  sideText = "",
+  sideTextLink = "",
   ...rest
 }) => (
   <PageTitleWrapper>
@@ -30,18 +32,18 @@ const PageTitle: FC<PageTitleProps> = ({
         </Typography>
         <Typography variant="subtitle2">{subHeading}</Typography>
       </Grid>
-      <Grid item>
-        <Button
-          href={docs}
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{ mt: { xs: 2, md: 0 } }}
-          variant="contained"
-          startIcon={<AddTwoToneIcon fontSize="small" />}
-        >
-          Add {heading}
-        </Button>
-      </Grid>
+      {sideText && sideTextLink && (
+        <Grid item>
+          <Button
+            href={sideTextLink}
+            sx={{ mt: { xs: 2, md: 0 } }}
+            variant="contained"
+            startIcon={<AddTwoToneIcon fontSize="small" />}
+          >
+            {sideText}
+          </Button>
+        </Grid>
+      )}
     </Grid>
   </PageTitleWrapper>
 )
@@ -49,7 +51,8 @@ const PageTitle: FC<PageTitleProps> = ({
 PageTitle.propTypes = {
   heading: PropTypes.string,
   subHeading: PropTypes.string,
-  docs: PropTypes.string,
+  sideText: PropTypes.string,
+  sideTextLink: PropTypes.string,
 }
 
 export default PageTitle
