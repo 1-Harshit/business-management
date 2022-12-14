@@ -5,17 +5,26 @@ interface DataGridProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rows: any[]
   columns: GridColDef[]
+  hiddenColumns?: string[]
 }
 
-const CustomDataGrid = ({ rows, columns }: DataGridProps) => {
+const CustomDataGrid = ({ rows, columns, hiddenColumns }: DataGridProps) => {
   const [pageSize, setPageSize] = useState(25)
+
+  let columnVisibility: { [column: string]: boolean } = {}
+
+  if (hiddenColumns) {
+    hiddenColumns.forEach((column) => {
+      columnVisibility[column] = false
+    })
+  }
 
   return (
     <DataGrid
       rows={rows}
       columns={columns}
       autoHeight
-      initialState={{ columns: { columnVisibilityModel: { date: false } } }}
+      initialState={{ columns: { columnVisibilityModel: columnVisibility } }}
       components={{ Toolbar: GridToolbar }}
       componentsProps={{
         toolbar: {

@@ -22,17 +22,33 @@ import DataGrid from "src/components/DataGrid"
 
 const gridCell = (
   { name = "NA", id = 0 }: { name: string; id: number },
-  type: string
+  type: string,
+  rate?: number
 ) => (
-  <>
-    {name}{" "}
-    {id !== 0 && (
-      <IconButton sx={{ mx: 1 }} href={`/admin/${type}/${id}`}>
-        <OpenInNewIcon sx={{ fontSize: 13 }} color="disabled" />
-      </IconButton>
+  <Grid container spacing={0}>
+    <Grid item xs={12}>
+      {name}{" "}
+      {id !== 0 && (
+        <IconButton sx={{ mx: 1 }} href={`/admin/${type}/${id}`}>
+          <OpenInNewIcon sx={{ fontSize: 13 }} color="disabled" />
+        </IconButton>
+      )}
+    </Grid>
+    {rate && (
+      <Grid item xs={12}>
+        <Typography variant="caption" color="text.secondary">
+          @₹
+          {Number(rate).toLocaleString("en-IN", {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 0,
+          })}
+        </Typography>
+      </Grid>
     )}
-  </>
+  </Grid>
 )
+
+const MIN_WIDTH = 150
 
 const DailyExpenses = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -88,14 +104,17 @@ const DailyExpenses = () => {
       </Grid>
     </Card>
   )
+
+  // Expense Table Columns
   const expenseColumns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 0.3 },
-    { field: "date", headerName: "Date", flex: 0.8 },
-    { field: "subject", headerName: "Subject", flex: 1 },
+    { field: "id", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
+    { field: "date", headerName: "Date", flex: 0.8, minWidth: 0.8 * MIN_WIDTH },
+    { field: "subject", headerName: "Subject", flex: 1, minWidth: MIN_WIDTH },
     {
       field: "amount",
       headerName: "Amount",
       flex: 1,
+      minWidth: MIN_WIDTH,
       renderCell: (params) =>
         `₹${Number(params.value).toLocaleString("en-IN", {
           maximumFractionDigits: 2,
@@ -106,6 +125,7 @@ const DailyExpenses = () => {
       field: "person",
       headerName: "Person",
       flex: 1,
+      minWidth: MIN_WIDTH,
       renderCell: (params) => gridCell(params.row.person || {}, "person"),
       valueGetter: (params) => params.value?.name || "NA",
     },
@@ -113,6 +133,7 @@ const DailyExpenses = () => {
       field: "site",
       headerName: "Site",
       flex: 1,
+      minWidth: MIN_WIDTH,
       renderCell: (params) => gridCell(params.row.site || {}, "site"),
       valueGetter: (params) => params.value?.name || "NA",
     },
@@ -120,6 +141,7 @@ const DailyExpenses = () => {
       field: "remarks",
       headerName: "Remarks",
       flex: 1,
+      minWidth: 1.1 * MIN_WIDTH,
       renderCell: (params) => (
         <Tooltip title={params.value}>
           <Typography>
@@ -161,13 +183,155 @@ const DailyExpenses = () => {
     },
   ]
 
+  // Material Table Columns
+  const materialColumns: GridColDef[] = [
+    { field: "id", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
+    { field: "date", headerName: "Date", flex: 0.8, minWidth: 0.8 * MIN_WIDTH },
+    {
+      field: "bill_no",
+      headerName: "Bill No",
+      flex: 0.7,
+      minWidth: 0.7 * MIN_WIDTH,
+    },
+    {
+      field: "item",
+      headerName: "Item",
+      flex: 1,
+      minWidth: MIN_WIDTH,
+      renderCell: (params) => (
+        <>
+          {params.value}
+          {params.row.quantity > 1 && (
+            <Typography sx={{ mx: 1 }} color="text.secondary">
+              x {params.row.quantity}
+            </Typography>
+          )}
+        </>
+      ),
+    },
+    {
+      field: "amount",
+      headerName: "Amount",
+      flex: 1,
+      minWidth: MIN_WIDTH,
+      renderCell: (params) =>
+        `₹${Number(params.value).toLocaleString("en-IN", {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 0,
+        })}`,
+      valueGetter: (params) => {
+        const material_rate = params.row.material_rate || 0
+        const transport_rate = params.row.transport_rate || 0
+        const rate = material_rate + transport_rate
+        const quantity = params.row.quantity || 0
+        return rate * quantity
+      },
+    },
+    {
+      field: "site",
+      headerName: "Site",
+      flex: 1,
+      minWidth: MIN_WIDTH,
+      renderCell: (params) => gridCell(params.row.site || {}, "site"),
+      valueGetter: (params) => params.value?.name || "NA",
+    },
+    {
+      field: "material_person",
+      headerName: "Material Person",
+      flex: 1,
+      minWidth: MIN_WIDTH,
+      renderCell: (params) =>
+        gridCell(
+          params.row.material_person || {},
+          "person",
+          params.row.material_rate
+        ),
+      valueGetter: (params) => params.value?.name || "NA",
+    },
+    {
+      field: "transport_person",
+      headerName: "Transport Person",
+      flex: 1,
+      minWidth: MIN_WIDTH,
+      renderCell: (params) =>
+        gridCell(
+          params.row.transport_person || {},
+          "person",
+          params.row.transport_rate
+        ),
+      valueGetter: (params) => params.value?.name || "NA",
+    },
+    {
+      field: "remarks",
+      headerName: "Remarks",
+      flex: 1,
+      minWidth: 1.1 * MIN_WIDTH,
+      renderCell: (params) => (
+        <Tooltip title={params.value}>
+          <Typography>
+            {params.value.substr(0, 20)}
+            {params.value.length > 20 && "..."}
+          </Typography>
+        </Tooltip>
+      ),
+    },
+  ]
+
+  const materialRows = [
+    {
+      id: 1,
+      date: "2017-01-01",
+      item: "Sand",
+      quantity: 2,
+      remarks: "Hello",
+      bill_no: "5659",
+      site: { name: "Site 1", id: 1 },
+      material_person: { name: "Rahul", id: 5 },
+      transport_person: { name: "Rahul", id: 5 },
+      material_rate: 1000,
+      transport_rate: 100,
+    },
+    {
+      id: 2,
+      date: "2017-01-01",
+      item: "Stone",
+      quantity: 1,
+      remarks: "Hello All",
+      bill_no: "5659s",
+      site: { name: "Site 2", id: 2 },
+      material_person: { name: "Other Rahul", id: 6 },
+      transport_person: { name: "Another Other Rahul", id: 7 },
+      material_rate: 1523,
+      transport_rate: 170,
+    },
+  ]
+
   const expenses = (
     <Card>
       <Box p={4}>
         <Typography variant="h4" sx={{ pb: 3 }}>
           All Expenses
         </Typography>
-        <DataGrid rows={expenseRows} columns={expenseColumns} />
+        <DataGrid
+          rows={expenseRows}
+          columns={expenseColumns}
+          hiddenColumns={["date"]}
+        />
+      </Box>
+    </Card>
+  )
+
+  const material = (
+    <Card>
+      <Box p={4}>
+        <Typography variant="h4" sx={{ pb: 3 }}>
+          All Material
+        </Typography>
+        <DataGrid
+          rows={materialRows}
+          columns={materialColumns}
+          hiddenColumns={["date"]}
+        />
       </Box>
     </Card>
   )
@@ -194,6 +358,9 @@ const DailyExpenses = () => {
           </Grid>
           <Grid item xs={12}>
             {expenses}
+          </Grid>
+          <Grid item xs={12}>
+            {material}
           </Grid>
         </Grid>
       </Container>
