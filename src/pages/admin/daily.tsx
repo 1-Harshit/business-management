@@ -18,7 +18,7 @@ import DataGrid from "src/components/DataGrid"
 import {
   dailyExpenseColumns,
   dailyMaterialColumns,
-} from "src/views/daily/colDef"
+} from "src/constants/colDefs/daily"
 
 const expenseRows = [
   {
