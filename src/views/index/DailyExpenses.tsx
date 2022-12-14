@@ -12,15 +12,10 @@ import {
   Typography,
   alpha,
   styled,
-  useTheme,
 } from "@mui/material"
-import dynamic from "next/dynamic"
-import type { ApexOptions } from "apexcharts"
-import { useEffect, useState } from "react"
+import Image from "next/image"
 
 import Text from "src/components/Text"
-
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false })
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -59,81 +54,7 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 )
 
 const DailyExpenses = () => {
-  const theme = useTheme()
-  const [values, setValues] = useState({ labels: [""], series: [0] })
-
-  const chartOptions: ApexOptions = {
-    chart: {
-      background: "transparent",
-      stacked: false,
-      toolbar: {
-        show: false,
-      },
-    },
-    plotOptions: {
-      pie: {
-        donut: {
-          size: "60%",
-        },
-      },
-    },
-    colors: ["#ff9900", "#1c81c2", "#333", "#5c6ac0"],
-    dataLabels: {
-      enabled: true,
-      formatter(val) {
-        return `${val}%`
-      },
-      style: {
-        colors: [theme.colors.alpha.trueWhite[100]],
-      },
-      background: {
-        enabled: true,
-        foreColor: theme.colors.alpha.trueWhite[100],
-        padding: 8,
-        borderRadius: 4,
-        borderWidth: 0,
-        opacity: 0.3,
-        dropShadow: {
-          enabled: true,
-          top: 1,
-          left: 1,
-          blur: 1,
-          color: theme.colors.alpha.black[70],
-          opacity: 0.5,
-        },
-      },
-      dropShadow: {
-        enabled: true,
-        top: 1,
-        left: 1,
-        blur: 1,
-        color: theme.colors.alpha.black[50],
-        opacity: 0.5,
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    legend: {
-      labels: {
-        colors: theme.colors.alpha.trueWhite[100],
-      },
-      show: false,
-    },
-    stroke: {
-      width: 0,
-    },
-    theme: {
-      mode: theme.palette.mode,
-    },
-  }
-
-  useEffect(() => {
-    setValues({
-      labels: ["Net Banking", "UPI", "CASH", "Other"],
-      series: [10, 20, 25, 45],
-    })
-  }, [])
+  const c = "₹"
 
   return (
     <Card>
@@ -184,12 +105,12 @@ const DailyExpenses = () => {
             </Box>
             <Grid container spacing={3} pt={3}>
               <Grid sm item>
-                <Button fullWidth variant="outlined">
+                <Button fullWidth variant="outlined" href="/admin/daily">
                   View Expenses
                 </Button>
               </Grid>
               <Grid sm item>
-                <Button fullWidth variant="contained">
+                <Button fullWidth variant="contained" href="/admin/new/expense">
                   Add Expense
                 </Button>
               </Grid>
@@ -214,103 +135,89 @@ const DailyExpenses = () => {
           >
             <Divider absolute orientation="vertical" />
           </Box>
-          <Box py={4} pr={4} flex={1}>
-            <Grid container spacing={0}>
-              <Grid
-                xs={12}
-                sm={5}
-                item
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Chart
-                  height={250}
-                  options={{ ...chartOptions, labels: values.labels }}
-                  series={values.series}
-                  type="donut"
-                  name="Expenses"
-                />
-              </Grid>
-              <Grid xs={12} sm={7} item display="flex" alignItems="center">
-                <List
-                  disablePadding
-                  sx={{
-                    width: "100%",
+          <Box p={4} flex={1}>
+            <List
+              disablePadding
+              sx={{
+                width: "100%",
+              }}
+            >
+              <ListItem disableGutters>
+                <ListItemAvatarWrapper>
+                  <Image
+                    alt="Cash"
+                    src="/static/images/rupee.png"
+                    width={60}
+                    height={60}
+                  />
+                </ListItemAvatarWrapper>
+                <ListItemText
+                  primary="Cash"
+                  primaryTypographyProps={{ variant: "h5", noWrap: true }}
+                  secondary="Cash Expenses"
+                  secondaryTypographyProps={{
+                    variant: "subtitle2",
+                    noWrap: true,
                   }}
-                >
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="BTC"
-                        src="/static/images/placeholders/logo/bitcoin.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="Cash"
-                      primaryTypographyProps={{ variant: "h5", noWrap: true }}
-                      secondary="Chash Expenses"
-                      secondaryTypographyProps={{
-                        variant: "subtitle2",
-                        noWrap: true,
-                      }}
-                    />
-                    <Box alignItems="right" textAlign="right">
-                      <Typography align="right" variant="h4" noWrap>
-                        ₹ 53,000.00
-                      </Typography>
-                      <Text>2.54%</Text>
-                    </Box>
-                  </ListItem>
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="XRP"
-                        src="/static/images/placeholders/logo/ripple.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="UPI"
-                      primaryTypographyProps={{ variant: "h5", noWrap: true }}
-                      secondary="UPI Payments"
-                      secondaryTypographyProps={{
-                        variant: "subtitle2",
-                        noWrap: true,
-                      }}
-                    />
-                    <Box alignItems="right" textAlign="right">
-                      <Typography align="right" variant="h4" noWrap>
-                        ₹ 53,000.00
-                      </Typography>
-                      <Text>2.54%</Text>
-                    </Box>
-                  </ListItem>
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="ADA"
-                        src="/static/images/placeholders/logo/cardano.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="Others"
-                      primaryTypographyProps={{ variant: "h5", noWrap: true }}
-                      secondary="Other Payment Modes"
-                      secondaryTypographyProps={{
-                        variant: "subtitle2",
-                        noWrap: true,
-                      }}
-                    />
-                    <Box alignItems="right" textAlign="right">
-                      <Typography align="right" variant="h4" noWrap>
-                        ₹ 53,000.00
-                      </Typography>
-                      <Text>2.54%</Text>
-                    </Box>
-                  </ListItem>
-                </List>
-              </Grid>
-            </Grid>
+                />
+                <Box alignItems="right" textAlign="right">
+                  <Typography align="right" variant="h4" noWrap>
+                    ₹ 53,000.00
+                  </Typography>
+                  <Text>2.54%</Text>
+                </Box>
+              </ListItem>
+              <ListItem disableGutters>
+                <ListItemAvatarWrapper>
+                  <Image
+                    alt="UPI"
+                    src="/static/images/gpay.png"
+                    width={60}
+                    height={60}
+                  />
+                </ListItemAvatarWrapper>
+                <ListItemText
+                  primary="UPI"
+                  primaryTypographyProps={{ variant: "h5", noWrap: true }}
+                  secondary="UPI Payments"
+                  secondaryTypographyProps={{
+                    variant: "subtitle2",
+                    noWrap: true,
+                  }}
+                />
+                <Box alignItems="right" textAlign="right">
+                  <Typography align="right" variant="h4" noWrap>
+                    ₹ 53,000.00
+                  </Typography>
+                  <Text>2.54%</Text>
+                </Box>
+              </ListItem>
+              <ListItem disableGutters>
+                <ListItemAvatarWrapper>
+                  <Image
+                    alt="Others"
+                    src="/static/images/money-bag.png"
+                    width={60}
+                    height={60}
+                  />
+                </ListItemAvatarWrapper>
+                <ListItemText
+                  primary="Others"
+                  primaryTypographyProps={{ variant: "h5", noWrap: true }}
+                  secondary="Other Payment Modes"
+                  secondaryTypographyProps={{
+                    variant: "subtitle2",
+                    noWrap: true,
+                  }}
+                />
+                <Box alignItems="right" textAlign="right">
+                  <Typography align="right" variant="h4" noWrap>
+                    ₹ 53,000.00
+                  </Typography>
+                  <Text>2.54%</Text>
+                </Box>
+              </ListItem>
+            </List>
           </Box>
         </Grid>
       </Grid>
