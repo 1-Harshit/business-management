@@ -9,6 +9,7 @@ import {
 } from "@mui/material"
 import Head from "next/head"
 import { ChangeEvent, useState } from "react"
+import SaveIcon from "@mui/icons-material/Save"
 
 import PageTitle from "src/components/PageTitle"
 import { Person } from "src/constants/models"
@@ -129,12 +130,14 @@ const PersonEdit = () => {
             <Grid item xs={12} md={4} />
             <Grid item xs={12} md={4}>
               <LoadingButton
-                variant="contained"
                 fullWidth
-                loading={isLoading}
+                variant="contained"
                 onClick={handleSubmit}
+                loading={isLoading}
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
               >
-                Save Person
+                Save
               </LoadingButton>
             </Grid>
           </Grid>

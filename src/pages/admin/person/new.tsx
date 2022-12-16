@@ -1,14 +1,8 @@
 import { LoadingButton } from "@mui/lab"
-import {
-  Card,
-  Container,
-  Grid,
-  TextField,
-  TextFieldProps,
-  Typography,
-} from "@mui/material"
+import { Card, Container, Grid, TextField, Typography } from "@mui/material"
 import Head from "next/head"
 import { ChangeEvent, useState } from "react"
+import SaveIcon from "@mui/icons-material/Save"
 
 import PageTitle from "src/components/PageTitle"
 import { Person } from "src/constants/models"
@@ -96,6 +90,8 @@ const PersonNew = () => {
                 fullWidth
                 loading={isLoading}
                 onClick={handleSubmit}
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
               >
                 Add Person
               </LoadingButton>
