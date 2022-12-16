@@ -33,7 +33,7 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
         <Grid item xs={12} md={8}>
           <Typography variant="h4">Construction Site Details</Typography>
           <Typography color="textSecondary" sx={{ mb: 2 }}>
-            Change the details and save
+            All transactions of this site is listed below
           </Typography>
         </Grid>
         <Grid
