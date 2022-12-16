@@ -137,7 +137,7 @@ const PersonEdit = () => {
                 loadingPosition="start"
                 startIcon={<SaveIcon />}
               >
-                Save
+                Save Changes
               </LoadingButton>
             </Grid>
           </Grid>
