@@ -18,37 +18,32 @@ import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
+import { Expense, Person, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
-const sites = [
-  { name: "Swiggy", id: 1 },
-  { name: "Zomato", id: 2 },
-  { name: "Uber Eats", id: 3 },
-  { name: "Food Panda", id: 4 },
-]
+const sites: Site[] = [
+  { name: "Swiggy", ID: 1 },
+  { name: "Zomato", ID: 2 },
+  { name: "Uber Eats", ID: 3 },
+  { name: "Food Panda", ID: 4 },
+] as Site[]
 
-const persons = [
-  { name: "Rahul", id: 1, contact: "1234567890" },
-  { name: "Shubham", id: 2, contact: "1234567890" },
-  { name: "Rohit", id: 3, contact: "1234567890" },
-  { name: "Somya", id: 4, contact: "1234567890" },
-]
+const persons: Person[] = [
+  { name: "Rahul", ID: 1, contact: "1234567890" },
+  { name: "Shubham", ID: 2, contact: "1234567890" },
+  { name: "Rohit", ID: 3, contact: "1234567890" },
+  { name: "Somya", ID: 4, contact: "1234567890" },
+] as Person[]
 
 const NewExpense = () => {
   const [loading, setLoading] = useState(false)
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [selectedSite, setSelectedSite] = useState({ name: "", id: 0 })
-  const [selectedPerson, setSelectedPerson] = useState({
-    name: "",
-    id: 0,
-    contact: "",
-  })
-  const [values, setValues] = useState({
-    subject: "",
-    amount: null,
-    remarks: "",
+  const [selectedSite, setSelectedSite] = useState<Site>({} as Site)
+  const [selectedPerson, setSelectedPerson] = useState<Person>({} as Person)
+  const [values, setValues] = useState<Expense>({
     mode: "Cash",
-  })
+  } as Expense)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -175,10 +170,10 @@ const NewExpense = () => {
                       disabled={loading}
                       id="site"
                       options={sites}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={selectedSite}
                       onChange={(event, value, reason) =>
-                        setSelectedSite(value || { name: "", id: 0 })
+                        setSelectedSite(value || ({} as Site))
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Site" />
@@ -192,13 +187,11 @@ const NewExpense = () => {
                       id="person"
                       options={persons}
                       getOptionLabel={(option) =>
-                        `${option.name} | ${option.contact}`
+                        option.name ? `${option.name} | ${option.contact}` : ""
                       }
                       value={selectedPerson}
                       onChange={(event, value, reason) =>
-                        setSelectedPerson(
-                          value || { name: "", id: 0, contact: "" }
-                        )
+                        setSelectedPerson(value || ({} as Person))
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Person" />

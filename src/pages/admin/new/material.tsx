@@ -13,44 +13,31 @@ import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
+import { Material, Person, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
-const sites = [
-  { name: "Swiggy", id: 1 },
-  { name: "Zomato", id: 2 },
-  { name: "Uber Eats", id: 3 },
-  { name: "Food Panda", id: 4 },
-]
+const sites: Site[] = [
+  { name: "Swiggy", ID: 1 },
+  { name: "Zomato", ID: 2 },
+  { name: "Uber Eats", ID: 3 },
+  { name: "Food Panda", ID: 4 },
+] as Site[]
 
-const persons = [
-  { name: "Rahul", id: 1, contact: "1234567890" },
-  { name: "Shubham", id: 2, contact: "1234567890" },
-  { name: "Rohit", id: 3, contact: "1234567890" },
-  { name: "Somya", id: 4, contact: "1234567890" },
-]
+const persons: Person[] = [
+  { name: "Rahul", ID: 1, contact: "1234567890" },
+  { name: "Shubham", ID: 2, contact: "1234567890" },
+  { name: "Rohit", ID: 3, contact: "1234567890" },
+  { name: "Somya", ID: 4, contact: "1234567890" },
+] as Person[]
 
 const NewMaterial = () => {
   const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [selectedSite, setSelectedSite] = useState({ name: "", id: 0 })
-  const [selectedMaterialPerson, setSelectedMaterialPerson] = useState({
-    name: "",
-    id: 0,
-    contact: "",
-  })
-  const [selectedTransportPerson, setSelectedTransportPerson] = useState({
-    name: "",
-    id: 0,
-    contact: "",
-  })
-  const [values, setValues] = useState({
-    item: "",
-    bill_no: "",
-    quantity: 1,
-    material_rate: null,
-    transport_rate: null,
-    remarks: "",
-  })
+  const [selectedSite, setSelectedSite] = useState<Site>()
+  const [selectedMaterialPerson, setSelectedMaterialPerson] = useState<Person>()
+  const [selectedTransportPerson, setSelectedTransportPerson] =
+    useState<Person>()
+  const [values, setValues] = useState<Material>({ quantity: 1 } as Material)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -128,7 +115,7 @@ const NewMaterial = () => {
                       label="Bill No."
                       name="bill_no"
                       onChange={handleInputChange}
-                      value={values.bill_no}
+                      value={values.billNo}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -151,7 +138,7 @@ const NewMaterial = () => {
                       label="Material Rate (in ₹)"
                       name="material_rate"
                       onChange={handleInputChange}
-                      value={values.material_rate}
+                      value={values.materialRate}
                       type="number"
                       onWheel={handleWheel}
                     />
@@ -163,7 +150,7 @@ const NewMaterial = () => {
                       label="Transport Rate (in ₹)"
                       name="transport_rate"
                       onChange={handleInputChange}
-                      value={values.transport_rate}
+                      value={values.transportRate}
                       type="number"
                       onWheel={handleWheel}
                     />
@@ -174,12 +161,10 @@ const NewMaterial = () => {
                       disabled={loading}
                       id="material_person"
                       options={persons}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={selectedMaterialPerson}
-                      onChange={(event, value, reason) =>
-                        setSelectedMaterialPerson(
-                          value || { name: "", id: 0, contact: "" }
-                        )
+                      onChange={(e, value, r) =>
+                        setSelectedMaterialPerson(value || ({} as Person))
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Material Person" />
@@ -192,12 +177,10 @@ const NewMaterial = () => {
                       disabled={loading}
                       id="transport_person"
                       options={persons}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={selectedTransportPerson}
-                      onChange={(event, value, reason) =>
-                        setSelectedTransportPerson(
-                          value || { name: "", id: 0, contact: "" }
-                        )
+                      onChange={(e, value, r) =>
+                        setSelectedTransportPerson(value || ({} as Person))
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Transport Person" />
@@ -210,10 +193,10 @@ const NewMaterial = () => {
                       disabled={loading}
                       id="site"
                       options={sites}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={selectedSite}
-                      onChange={(event, value, reason) =>
-                        setSelectedSite(value || { name: "", id: 0 })
+                      onChange={(e, value, r) =>
+                        setSelectedSite(value || ({} as Site))
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Site" />

@@ -5,6 +5,7 @@ export interface Site {
   name: string
   address: string
   isActive: boolean
+  comments: string
   // Fields for tender details
   agreementDate: Date
   completionDate: Date

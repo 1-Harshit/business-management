@@ -11,16 +11,17 @@ import Head from "next/head"
 import { ChangeEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
+import { Person } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
 const PersonEdit = () => {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<Person>({
     name: "Harshit",
     contact: "7992241",
     address: "Chatra",
     comments: "nothing",
     isActive: true,
-  })
+  } as Person)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {

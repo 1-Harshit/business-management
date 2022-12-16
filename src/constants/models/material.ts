@@ -6,7 +6,7 @@ export interface Material {
   createdAt: Date
   updatedAt: Date
   date: Date
-  name: string
+  item: string
   billNo: string
   quantity: number
   materialRate: number

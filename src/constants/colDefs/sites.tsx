@@ -5,7 +5,7 @@ import { GridColDef } from "@mui/x-data-grid"
 const MIN_WIDTH = 150
 
 const siteColDefs: GridColDef[] = [
-  { field: "id", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
+  { field: "ID", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
   { field: "name", headerName: "Name", flex: 1, minWidth: MIN_WIDTH },
   {
     field: "address",
@@ -14,15 +14,15 @@ const siteColDefs: GridColDef[] = [
     minWidth: 1.25 * MIN_WIDTH,
   },
   {
-    field: "start_date",
-    headerName: "Start Date",
+    field: "agreementDate",
+    headerName: "Aggreement Date",
     flex: 1,
     minWidth: MIN_WIDTH,
     type: "date",
   },
   {
-    field: "end_date",
-    headerName: "End Date",
+    field: "completionDate",
+    headerName: "Completion Date",
     flex: 1,
     minWidth: MIN_WIDTH,
     type: "date",
@@ -42,7 +42,7 @@ const siteColDefs: GridColDef[] = [
     ),
   },
   {
-    field: "is_active",
+    field: "isActive",
     headerName: "Active",
     flex: 0.5,
     minWidth: 0.5 * MIN_WIDTH,

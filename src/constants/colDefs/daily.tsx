@@ -5,15 +5,15 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 const MIN_WIDTH = 150
 
 const gridCell = (
-  { name = "NA", id = 0 }: { name: string; id: number },
+  { name = "NA", ID = 0 }: { name: string; ID: number },
   type: string,
   rate?: number
 ) => (
   <Grid container spacing={0}>
     <Grid item xs={12}>
       {name}{" "}
-      {id !== 0 && (
-        <IconButton href={`/admin/${type}/${id}`}>
+      {ID !== 0 && (
+        <IconButton href={`/admin/${type}/${ID}`}>
           <OpenInNewIcon sx={{ fontSize: 13 }} color="disabled" />
         </IconButton>
       )}
@@ -33,10 +33,16 @@ const gridCell = (
 )
 // Material Table Columns
 const dailyMaterialColumns: GridColDef[] = [
-  { field: "id", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
-  { field: "date", headerName: "Date", flex: 0.8, minWidth: 0.8 * MIN_WIDTH },
+  { field: "ID", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
   {
-    field: "bill_no",
+    field: "date",
+    headerName: "Date",
+    flex: 0.8,
+    minWidth: 0.8 * MIN_WIDTH,
+    type: "date",
+  },
+  {
+    field: "billNo",
     headerName: "Bill No",
     flex: 0.7,
     minWidth: 0.7 * MIN_WIDTH,
@@ -68,9 +74,9 @@ const dailyMaterialColumns: GridColDef[] = [
         minimumFractionDigits: 0,
       })}`,
     valueGetter: (params) => {
-      const material_rate = params.row.material_rate || 0
-      const transport_rate = params.row.transport_rate || 0
-      const rate = material_rate + transport_rate
+      const materialRate = params.row.materialRate || 0
+      const transportRate = params.row.transportRate || 0
+      const rate = materialRate + transportRate
       const quantity = params.row.quantity || 0
       return rate * quantity
     },
@@ -84,40 +90,40 @@ const dailyMaterialColumns: GridColDef[] = [
     valueGetter: (params) => params.value?.name || "NA",
   },
   {
-    field: "material_person",
+    field: "materialPerson",
     headerName: "Material Person",
     flex: 1,
     minWidth: MIN_WIDTH,
     renderCell: (params) =>
       gridCell(
-        params.row.material_person || {},
+        params.row.materialPerson || {},
         "person",
-        params.row.material_rate
+        params.row.materialRate
       ),
     valueGetter: (params) => params.value?.name || "NA",
   },
   {
-    field: "transport_person",
+    field: "transportPerson",
     headerName: "Transport Person",
     flex: 1,
     minWidth: MIN_WIDTH,
     renderCell: (params) =>
       gridCell(
-        params.row.transport_person || {},
+        params.row.transportPerson || {},
         "person",
-        params.row.transport_rate
+        params.row.transportRate
       ),
     valueGetter: (params) => params.value?.name || "NA",
   },
   {
-    field: "material_rate",
+    field: "materialRate",
     headerName: "Material Rate",
     type: "number",
     flex: 0.5,
     minWidth: 0.5 * MIN_WIDTH,
   },
   {
-    field: "transport_rate",
+    field: "transportRate",
     headerName: "Transport Rate",
     type: "number",
     flex: 0.5,
@@ -148,8 +154,14 @@ const dailyMaterialColumns: GridColDef[] = [
 
 // Expense Table Columns
 const dailyExpenseColumns: GridColDef[] = [
-  { field: "id", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
-  { field: "date", headerName: "Date", flex: 0.8, minWidth: 0.8 * MIN_WIDTH },
+  { field: "ID", headerName: "ID", flex: 0.3, minWidth: 0.3 * MIN_WIDTH },
+  {
+    field: "date",
+    headerName: "Date",
+    flex: 0.8,
+    minWidth: 0.8 * MIN_WIDTH,
+    type: "date",
+  },
   { field: "subject", headerName: "Subject", flex: 1, minWidth: MIN_WIDTH },
   {
     field: "amount",

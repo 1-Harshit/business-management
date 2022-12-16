@@ -19,68 +19,69 @@ import {
   dailyExpenseColumns,
   dailyMaterialColumns,
 } from "src/constants/colDefs/daily"
+import { Expense, Material } from "src/constants/models"
 
 const expenseRows = [
   {
-    id: 1,
-    date: "2021-09-01",
+    ID: 1,
+    date: new Date("2021-09-01"),
     subject: "Food",
     amount: 1000.0,
-    person: { name: "Rahul", id: 5 },
-    site: { name: "Swiggy", id: 1 },
+    person: { name: "Rahul", ID: 5 },
+    site: { name: "Swiggy", ID: 1 },
     remarks: "Food for 2 peop000le",
     mode: "Cash",
   },
   {
-    id: 2,
-    date: "2021-09-01",
+    ID: 2,
+    date: new Date("2021-09-01"),
     subject: "Food",
     amount: 56500,
-    person: { name: "Rahul", id: 55 },
-    site: { name: "Swiggy", id: 1 },
+    person: { name: "Rahul", ID: 55 },
+    site: { name: "Swiggy", ID: 1 },
     remarks: "Food for 2 people",
     mode: "UPI",
   },
   {
-    id: 3,
-    date: "2021-09-01",
+    ID: 3,
+    date: new Date("2021-09-01"),
     subject: "Food",
     amount: 14654600,
-    site: { name: "Swiggy", id: 1 },
+    site: { name: "Swiggy", ID: 1 },
     remarks:
       "Food for 2 peamdsfgijdkaldbgsflkjasbdhufkjadashdkdbfnhvujkbsdsnfdhnbsnaslijdknople",
     mode: "Cash",
   },
-]
+] as Expense[]
 
 const materialRows = [
   {
-    id: 1,
-    date: "2017-01-01",
+    ID: 1,
+    date: new Date("2021-09-01"),
     item: "Sand",
     quantity: 2,
     remarks: "Hello",
-    bill_no: "5659",
-    site: { name: "Site 1", id: 1 },
-    material_person: { name: "Rahul", id: 5 },
-    transport_person: { name: "Rahul", id: 5 },
-    material_rate: 1000,
-    transport_rate: 100,
+    billNo: "5659",
+    site: { name: "Site 1", ID: 1 },
+    materialPerson: { name: "Rahul", ID: 5 },
+    transportPerson: { name: "Rahul", ID: 5 },
+    materialRate: 1000,
+    transportRate: 100,
   },
   {
-    id: 2,
-    date: "2017-01-01",
+    ID: 2,
+    date: new Date("2021-09-01"),
     item: "Stone",
     quantity: 1,
     remarks: "Hello All",
-    bill_no: "5659s",
-    site: { name: "Site 2", id: 2 },
-    material_person: { name: "Other Rahul", id: 6 },
-    transport_person: { name: "Another Other Rahul", id: 7 },
-    material_rate: 1523,
-    transport_rate: 170,
+    billNo: "5659s",
+    site: { name: "Site 2", ID: 2 },
+    materialPerson: { name: "Other Rahul", ID: 6 },
+    transportPerson: { name: "Another Other Rahul", ID: 7 },
+    materialRate: 1523,
+    transportRate: 170,
   },
-]
+] as Material[]
 
 // MAIN COMPONENT
 const DailyExpenses = () => {
@@ -162,12 +163,7 @@ const DailyExpenses = () => {
         <DataGrid
           rows={materialRows}
           columns={dailyMaterialColumns}
-          hiddenColumns={[
-            "date",
-            "transport_rate",
-            "material_rate",
-            "quantity",
-          ]}
+          hiddenColumns={["date", "transportRate", "materialRate", "quantity"]}
         />
       </Box>
     </Card>

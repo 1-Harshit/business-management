@@ -1,20 +1,22 @@
 import { LoadingButton } from "@mui/lab"
-import { Card, Container, Grid, TextField, Typography } from "@mui/material"
+import {
+  Card,
+  Container,
+  Grid,
+  TextField,
+  TextFieldProps,
+  Typography,
+} from "@mui/material"
 import Head from "next/head"
 import { ChangeEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
+import { Person } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
 const PersonNew = () => {
-  const [values, setValues] = useState({
-    name: "",
-    contact: "",
-    address: "",
-    comments: "",
-    isActive: false,
-    isLoading: false,
-  })
+  const [values, setValues] = useState<Person>({} as Person)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -25,16 +27,10 @@ const PersonNew = () => {
   }
 
   const handleSubmit = () => {
-    setValues({
-      ...values,
-      isLoading: true,
-    })
+    setIsLoading(true)
     // console.log(values)
     setTimeout(() => {
-      setValues({
-        ...values,
-        isLoading: false,
-      })
+      setIsLoading(false)
     }, 2000)
   }
 
@@ -60,7 +56,7 @@ const PersonNew = () => {
                 name="name"
                 onChange={handleInputChange}
                 value={values.name}
-                disabled={values.isLoading}
+                disabled={isLoading}
               />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -70,7 +66,7 @@ const PersonNew = () => {
                 name="address"
                 onChange={handleInputChange}
                 value={values.address}
-                disabled={values.isLoading}
+                disabled={isLoading}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -80,7 +76,7 @@ const PersonNew = () => {
                 name="contact"
                 onChange={handleInputChange}
                 value={values.contact}
-                disabled={values.isLoading}
+                disabled={isLoading}
               />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -90,7 +86,7 @@ const PersonNew = () => {
                 name="comments"
                 onChange={handleInputChange}
                 value={values.comments}
-                disabled={values.isLoading}
+                disabled={isLoading}
               />
             </Grid>
             <Grid item xs={12} md={4} />
@@ -98,7 +94,7 @@ const PersonNew = () => {
               <LoadingButton
                 variant="contained"
                 fullWidth
-                loading={values.isLoading}
+                loading={isLoading}
                 onClick={handleSubmit}
               >
                 Add Person
