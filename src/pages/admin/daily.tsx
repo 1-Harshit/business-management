@@ -145,7 +145,7 @@ const DailyExpenses = () => {
         <DataGrid
           rows={expenseRows}
           columns={expenseColDef}
-          hiddenColumns={["date"]}
+          hiddenColumns={["createdAt", "updatedAt", "date"]}
         />
       </Box>
     </Card>
@@ -160,7 +160,14 @@ const DailyExpenses = () => {
         <DataGrid
           rows={materialRows}
           columns={MaterialColDef}
-          hiddenColumns={["date", "transportRate", "materialRate", "quantity"]}
+          hiddenColumns={[
+            "createdAt",
+            "updatedAt",
+            "date",
+            "transportRate",
+            "materialRate",
+            "quantity",
+          ]}
         />
       </Box>
     </Card>

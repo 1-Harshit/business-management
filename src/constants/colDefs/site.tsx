@@ -65,6 +65,7 @@ const siteColDefs: GridColDef[] = [
     headerName: "Active",
     flex: 0.5,
     minWidth: 0.5 * MIN_WIDTH,
+    align: "center",
     renderCell: (params) => (params.value ? <Check /> : <Close />),
   },
   {

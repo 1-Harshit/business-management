@@ -37,7 +37,11 @@ const Persons = () => {
           <Typography variant="h4" sx={{ mb: 2 }}>
             Persons
           </Typography>
-          <DataGrid columns={personsColDef} rows={personRows} />
+          <DataGrid
+            columns={personsColDef}
+            rows={personRows}
+            hiddenColumns={["createdAt", "updatedAt"]}
+          />
         </Card>
       </Container>
     </>
