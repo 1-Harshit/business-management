@@ -47,14 +47,15 @@ const PersonEdit = () => {
       </Head>
       <PageTitle
         heading={`Editing data of ${values.name}`}
-        subHeading="Add a new Person to the database"
+        subHeading={`Edit Person with id ${values.ID}`}
       />
       <Container maxWidth="lg">
         <Card sx={{ p: { xs: 2, md: 4 } }}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
-              <Typography variant="h4" sx={{ mb: 2 }}>
-                Add a new Person
+              <Typography variant="h4">Edit a Person</Typography>
+              <Typography color="textSecondary" sx={{ mb: 2 }}>
+                Change the details and save
               </Typography>
             </Grid>
             <Grid
@@ -72,7 +73,7 @@ const PersonEdit = () => {
               </Typography>
               <Switch
                 checked={values.isActive}
-                onChange={(event, checked) => {
+                onChange={(e, checked) => {
                   setValues({
                     ...values,
                     isActive: checked,
@@ -133,7 +134,7 @@ const PersonEdit = () => {
                 loading={isLoading}
                 onClick={handleSubmit}
               >
-                Edit Person
+                Save Person
               </LoadingButton>
             </Grid>
           </Grid>
