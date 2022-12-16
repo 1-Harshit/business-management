@@ -179,6 +179,12 @@ const dailyExpenseColumns: GridColDef[] = [
     valueGetter: (params) => params.value?.name || "NA",
   },
   {
+    field: "mode",
+    headerName: "Mode",
+    flex: 0.5,
+    minWidth: 0.5 * MIN_WIDTH,
+  },
+  {
     field: "remarks",
     headerName: "Remarks",
     flex: 1,

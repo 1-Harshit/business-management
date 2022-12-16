@@ -46,7 +46,7 @@ const NewMaterial = () => {
   const [values, setValues] = useState({
     item: "",
     bill_no: "",
-    quantity: null,
+    quantity: 1,
     material_rate: null,
     transport_rate: null,
     remarks: "",
@@ -119,7 +119,6 @@ const NewMaterial = () => {
                       name="item"
                       onChange={handleInputChange}
                       value={values.item}
-                      variant="outlined"
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -130,7 +129,6 @@ const NewMaterial = () => {
                       name="bill_no"
                       onChange={handleInputChange}
                       value={values.bill_no}
-                      variant="outlined"
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -184,11 +182,7 @@ const NewMaterial = () => {
                         )
                       }
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Material Person"
-                          variant="outlined"
-                        />
+                        <TextField {...params} label="Material Person" />
                       )}
                     />
                   </Grid>
@@ -206,11 +200,7 @@ const NewMaterial = () => {
                         )
                       }
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Transport Person"
-                          variant="outlined"
-                        />
+                        <TextField {...params} label="Transport Person" />
                       )}
                     />
                   </Grid>
@@ -226,11 +216,7 @@ const NewMaterial = () => {
                         setSelectedSite(value || { name: "", id: 0 })
                       }
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Site"
-                          variant="outlined"
-                        />
+                        <TextField {...params} label="Site" />
                       )}
                     />
                   </Grid>
@@ -242,7 +228,6 @@ const NewMaterial = () => {
                       name="remarks"
                       onChange={handleInputChange}
                       value={values.remarks}
-                      variant="outlined"
                     />
                   </Grid>
                   <Grid item xs={12} md={4} />

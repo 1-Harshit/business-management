@@ -4,7 +4,12 @@ import {
   Button,
   Card,
   Container,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material"
@@ -42,6 +47,7 @@ const NewExpense = () => {
     subject: "",
     amount: null,
     remarks: "",
+    mode: "Cash",
   })
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +56,13 @@ const NewExpense = () => {
     setValues({
       ...values,
       [name]: newValue,
+    })
+  }
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    setValues({
+      ...values,
+      mode: event.target.value as string,
     })
   }
 
@@ -104,7 +117,7 @@ const NewExpense = () => {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={8}>
+                  <Grid item xs={12} md={4}>
                     <TextField
                       fullWidth
                       disabled={loading}
@@ -112,8 +125,27 @@ const NewExpense = () => {
                       name="subject"
                       onChange={handleInputChange}
                       value={values.subject}
-                      variant="outlined"
                     />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    {/* DROP DOWN WITH DEFAULT "CASH" */}
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="payment-mode">
+                        Payment Mode
+                      </InputLabel>
+                      <Select
+                        id="payment-mode"
+                        value={values.mode}
+                        onChange={handleSelectChange}
+                        name="mode"
+                        label="Payemnt Mode"
+                      >
+                        <MenuItem value="Cash">Cash</MenuItem>
+                        <MenuItem value="UPI">UPI</MenuItem>
+                        <MenuItem value="INB">INB</MenuItem>
+                        <MenuItem value="Other">Other</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
@@ -135,7 +167,6 @@ const NewExpense = () => {
                       name="remarks"
                       onChange={handleInputChange}
                       value={values.remarks}
-                      variant="outlined"
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -150,11 +181,7 @@ const NewExpense = () => {
                         setSelectedSite(value || { name: "", id: 0 })
                       }
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Site"
-                          variant="outlined"
-                        />
+                        <TextField {...params} label="Site" />
                       )}
                     />
                   </Grid>
@@ -174,11 +201,7 @@ const NewExpense = () => {
                         )
                       }
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Person"
-                          variant="outlined"
-                        />
+                        <TextField {...params} label="Person" />
                       )}
                     />
                   </Grid>

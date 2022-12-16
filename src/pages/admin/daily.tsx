@@ -29,6 +29,7 @@ const expenseRows = [
     person: { name: "Rahul", id: 5 },
     site: { name: "Swiggy", id: 1 },
     remarks: "Food for 2 peop000le",
+    mode: "Cash",
   },
   {
     id: 2,
@@ -38,6 +39,7 @@ const expenseRows = [
     person: { name: "Rahul", id: 55 },
     site: { name: "Swiggy", id: 1 },
     remarks: "Food for 2 people",
+    mode: "UPI",
   },
   {
     id: 3,
@@ -47,6 +49,7 @@ const expenseRows = [
     site: { name: "Swiggy", id: 1 },
     remarks:
       "Food for 2 peamdsfgijdkaldbgsflkjasbdhufkjadashdkdbfnhvujkbsdsnfdhnbsnaslijdknople",
+    mode: "Cash",
   },
 ]
 
