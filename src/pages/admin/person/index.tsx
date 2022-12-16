@@ -3,7 +3,7 @@ import Head from "next/head"
 
 import DataGrid from "src/components/DataGrid"
 import PageTitle from "src/components/PageTitle"
-import personsColDefs from "src/constants/colDefs/persons"
+import { personsColDef } from "src/constants/colDefs"
 import { Person } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
@@ -37,7 +37,7 @@ const Persons = () => {
           <Typography variant="h4" sx={{ mb: 2 }}>
             Persons
           </Typography>
-          <DataGrid columns={personsColDefs} rows={personRows} />
+          <DataGrid columns={personsColDef} rows={personRows} />
         </Card>
       </Container>
     </>

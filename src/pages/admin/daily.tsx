@@ -15,11 +15,8 @@ import moment from "moment"
 import SidebarLayout from "src/layouts/SidebarLayout"
 import PageTitle from "src/components/PageTitle"
 import DataGrid from "src/components/DataGrid"
-import {
-  dailyExpenseColumns,
-  dailyMaterialColumns,
-} from "src/constants/colDefs/daily"
 import { Expense, Material } from "src/constants/models"
+import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
 
 const expenseRows = [
   {
@@ -147,7 +144,7 @@ const DailyExpenses = () => {
         </Typography>
         <DataGrid
           rows={expenseRows}
-          columns={dailyExpenseColumns}
+          columns={expenseColDef}
           hiddenColumns={["date"]}
         />
       </Box>
@@ -162,7 +159,7 @@ const DailyExpenses = () => {
         </Typography>
         <DataGrid
           rows={materialRows}
-          columns={dailyMaterialColumns}
+          columns={MaterialColDef}
           hiddenColumns={["date", "transportRate", "materialRate", "quantity"]}
         />
       </Box>
