@@ -2,6 +2,8 @@ import { ObjectId } from "mongodb"
 
 export interface Site {
   _id: ObjectId
+  CreatedAt: Date
+  UpdatedAt: Date
   name: string
   address: string
   isActive: boolean

@@ -36,13 +36,17 @@ const gridCell = (
 )
 
 // Cell with tooltip/overflow
-const gridCellTooltip = (text: string) => (
-  <Tooltip title={text}>
-    <Typography>
-      {text.substring(0, 20)}
-      {text.length > 20 && "..."}
-    </Typography>
-  </Tooltip>
-)
+const gridCellTooltip = (text: string) => {
+  if (text)
+    return (
+      <Tooltip title={text}>
+        <Typography>
+          {text.substring(0, 20)}
+          {text.length > 20 && "..."}
+        </Typography>
+      </Tooltip>
+    )
+  return <Typography>NA</Typography>
+}
 
 export { gridCell, gridCellTooltip, renderAmount, MIN_WIDTH }

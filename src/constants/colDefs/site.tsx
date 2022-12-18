@@ -1,16 +1,16 @@
 import { Check, Close } from "@mui/icons-material"
-import { Button, Tooltip, Typography } from "@mui/material"
+import { Button } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
 
 import { MIN_WIDTH, gridCellTooltip } from "./base"
 
 const siteColDefs: GridColDef[] = [
   {
-    field: "ID",
+    field: "_id",
     headerName: "ID",
     flex: 0.3,
     minWidth: 0.3 * MIN_WIDTH,
-    type: "number",
+    type: "string",
   },
   {
     field: "createdAt",
@@ -45,6 +45,7 @@ const siteColDefs: GridColDef[] = [
     flex: 1,
     minWidth: MIN_WIDTH,
     type: "date",
+    valueFormatter: ({ value }) => new Date(value).toLocaleDateString(),
   },
   {
     field: "completionDate",
@@ -52,6 +53,7 @@ const siteColDefs: GridColDef[] = [
     flex: 1,
     minWidth: MIN_WIDTH,
     type: "date",
+    valueFormatter: ({ value }) => new Date(value).toLocaleDateString(),
   },
   {
     field: "comments",

@@ -49,18 +49,18 @@ const parseMaterial = (material: Material) => {
   return ret
 }
 
-const parse = (model: string, type: string) => {
+const parse = (model: object, type: string) => {
   if (type === "site") {
-    return parseSite(JSON.parse(model) as Site)
+    return parseSite(model as Site)
   }
   if (type === "person") {
-    return parsePerson(JSON.parse(model) as Person)
+    return parsePerson(model as Person)
   }
   if (type === "expense") {
-    return parseExpense(JSON.parse(model) as Expense)
+    return parseExpense(model as Expense)
   }
   if (type === "material") {
-    return parseMaterial(JSON.parse(model) as Material)
+    return parseMaterial(model as Material)
   }
   return null
 }
