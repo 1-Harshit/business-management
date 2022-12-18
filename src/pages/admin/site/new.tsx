@@ -22,6 +22,7 @@ import SidebarLayout from "src/layouts/SidebarLayout"
 const SiteNew = () => {
   const [values, setValues] = useState<Site>({} as Site)
   const [isLoading, setIsLoading] = useState(false)
+  const [readOnly, setReadOnly] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -31,21 +32,38 @@ const SiteNew = () => {
     })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
-    // console.log(values)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+
+    const res = await fetch("/api/site", requestOptions)
+
+    if (res.status === 200) {
+      setValues({
+        ...values,
+        _id: (await res.json())._id,
+      })
+      setReadOnly(true)
+    }
+    setIsLoading(false)
   }
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
     (e.target as EventTarget & HTMLDivElement).blur()
 
   const props = {
+    required: true,
     fullWidth: true,
     onChange: handleInputChange,
     disabled: isLoading,
+    inputProps: {
+      readOnly,
+    },
   }
 
   return (
@@ -197,8 +215,10 @@ const SiteNew = () => {
                   label="Agency"
                   disabled={isLoading}
                 >
-                  <MenuItem value="Cash">Pole Star Enterprises</MenuItem>
-                  <MenuItem value="UPI">Manoj Kumar</MenuItem>
+                  <MenuItem value="Pole Star Enterprises">
+                    Pole Star Enterprises
+                  </MenuItem>
+                  <MenuItem value="Manoj Kumar">Manoj Kumar</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -209,20 +229,30 @@ const SiteNew = () => {
                 value={values.comments}
                 multiline
                 {...props}
+                required={false}
               />
             </Grid>
             <Grid item xs={12} md={4} />
             <Grid item xs={12} md={4}>
-              <LoadingButton
-                fullWidth
-                variant="contained"
-                onClick={handleSubmit}
-                loading={isLoading}
-                loadingPosition="start"
-                startIcon={<SaveIcon />}
-              >
-                Add Site
-              </LoadingButton>
+              {readOnly ? (
+                <TextField
+                  label="Site ID"
+                  name="siteId"
+                  value={values._id}
+                  {...props}
+                />
+              ) : (
+                <LoadingButton
+                  fullWidth
+                  variant="contained"
+                  onClick={handleSubmit}
+                  loading={isLoading}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                >
+                  Add Site
+                </LoadingButton>
+              )}
             </Grid>
           </Grid>
         </Card>
