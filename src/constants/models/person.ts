@@ -1,7 +1,7 @@
+import { ObjectId } from "mongodb"
+
 export interface Person {
-  ID: number
-  createdAt: Date
-  updatedAt: Date
+  _id: ObjectId
   name: string
   contact: string
   address: string

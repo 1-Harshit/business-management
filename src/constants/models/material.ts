@@ -1,21 +1,15 @@
-import { Person } from "./person"
-import { Site } from "./site"
+import { ObjectId } from "mongodb"
+
+import { Entity } from "./entity"
 
 export interface Material {
-  ID: number
-  createdAt: Date
-  updatedAt: Date
+  _id: ObjectId
   date: Date
   item: string
   billNo: string
   quantity: number
-  materialRate: number
-  transportRate: number
-  materialPersonID: number
-  materialPerson: Person
-  transportPersonID: number
-  transportPerson: Person
-  siteID: number
-  site: Site
+  materialPerson: Entity
+  transportPerson: Entity
+  site: Entity
   remarks: string
 }
