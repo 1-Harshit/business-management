@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import { withIronSessionApiRoute } from "iron-session/next"
 
 import parse from "src/lib/parse"
+import { ironOptions } from "src/lib/config"
 import { Site } from "src/constants/models"
 import { addSite, updateSite } from "src/lib/api/site"
 
@@ -8,6 +10,12 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<Site[] | Site | { error: string }>
 ) => {
+  const { user } = req.session
+  if (!user) {
+    res.status(401).json({ error: "User not logged in" })
+    return
+  }
+
   try {
     switch (req.method) {
       case "POST": {
@@ -35,4 +43,4 @@ const handler = async (
   }
 }
 
-export default handler
+export default withIronSessionApiRoute(handler, ironOptions)

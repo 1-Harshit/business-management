@@ -1,10 +1,13 @@
-const secret = process.env.SECRET_COOKIE_PASSWORD
+/* eslint-disable import/prefer-default-export */
+import { IronSessionOptions } from "iron-session"
 
-if (!secret) {
+const secret = process.env.SECRET_COOKIE_PASSWORD as string
+
+if (!process.env.SECRET_COOKIE_PASSWORD) {
   throw new Error("SECRET_COOKIE_PASSWORD must be defined")
 }
 
-const ironOptions = {
+const ironOptions: IronSessionOptions = {
   cookieName: "pole",
   password: secret,
   // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
@@ -12,5 +15,17 @@ const ironOptions = {
     secure: process.env.NODE_ENV === "production",
   },
 }
+
+// You may need the next line in some situations
+// import * as IronSession from "iron-session";
+
+declare module "iron-session" {
+  interface IronSessionData {
+    user?: {
+      id: number
+      name: string
+    }
+  }
+}
+
 export { ironOptions }
-export default ironOptions
