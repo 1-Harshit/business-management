@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Avatar,
   Box,
@@ -12,6 +12,8 @@ import {
 import { styled } from "@mui/material/styles"
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone"
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone"
+
+import { getUser } from "src/lib/api/user"
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -49,15 +51,10 @@ const UserBoxDescription = styled(Typography)(
 )
 
 const HeaderUserbox = () => {
-  const user = {
-    name: "Harshit Raj",
-    avatar: "/static/images/avatars/1.jpg",
-    jobtitle: "Maintainer",
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef<any>(null)
   const [isOpen, setOpen] = useState<boolean>(false)
+  const [user, setUser] = useState(getUser())
 
   const handleOpen = (): void => {
     setOpen(true)
@@ -66,6 +63,17 @@ const HeaderUserbox = () => {
   const handleClose = (): void => {
     setOpen(false)
   }
+
+  const handleSignOut = async () => {
+    await fetch("/api/logout")
+    window.location.href = "/"
+  }
+
+  useEffect(() => {
+    if (localStorage) {
+      setUser(getUser())
+    }
+  }, [])
 
   return (
     <>
@@ -122,7 +130,7 @@ const HeaderUserbox = () => {
         </List> */}
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth onClick={handleSignOut}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

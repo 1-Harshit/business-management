@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import {
   Box,
   Button,
@@ -58,21 +58,30 @@ const Login = () => {
 
   const handleLogin = () => {
     setLoading(true)
-    // TODO: Login API Call
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+
+    fetch("/api/login", requestOptions)
+      .then((res) => {
+        if (res.status === 200) {
+          localStorage.setItem("userid", values.user)
+          window.location.href = "/admin"
+        }
+      })
+      .finally(() => setLoading(false))
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleChange = (prop: string) => (event: any) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+  const handleChange =
+    (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
+      setValues({ ...values, [prop]: event.target.value })
+    }
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleMouseDownPassword = (event: any) => {
-    event.preventDefault()
   }
 
   return (
@@ -182,7 +191,7 @@ const Login = () => {
                             <IconButton
                               aria-label="toggle password visibility"
                               onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
+                              onMouseDown={(e) => e.preventDefault()}
                               edge="end"
                             >
                               {values.showPassword ? (
