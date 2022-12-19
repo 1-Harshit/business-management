@@ -48,7 +48,7 @@ const toTitleCase = (str: string) =>
   )
 
 const numWords = (input: number) => {
-  const num = Number(input)
+  const num = Math.abs(Number(input))
   if (Number.isNaN(num)) return ""
   if (num === 0) return "zero"
 

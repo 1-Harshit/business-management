@@ -1,3 +1,5 @@
+import { ArrowBack, RestartAlt, Save } from "@mui/icons-material"
+import { LoadingButton } from "@mui/lab"
 import {
   Autocomplete,
   Box,
@@ -14,34 +16,27 @@ import {
   Typography,
 } from "@mui/material"
 import { DateTimePicker } from "@mui/x-date-pickers"
+import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
-import { Expense, Person, Site } from "src/constants/models"
+import { Entity, Expense, Person, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
+import { getActivePersons } from "src/lib/api/person"
+import { getActiveSites } from "src/lib/api/site"
+import numWords from "src/lib/words"
 
-const sites: Site[] = [
-  { name: "Swiggy", ID: 1 },
-  { name: "Zomato", ID: 2 },
-  { name: "Uber Eats", ID: 3 },
-  { name: "Food Panda", ID: 4 },
-] as Site[]
+interface NewExpenseProps {
+  sites: Site[]
+  persons: Person[]
+}
 
-const persons: Person[] = [
-  { name: "Rahul", ID: 1, contact: "1234567890" },
-  { name: "Shubham", ID: 2, contact: "1234567890" },
-  { name: "Rohit", ID: 3, contact: "1234567890" },
-  { name: "Somya", ID: 4, contact: "1234567890" },
-] as Person[]
-
-const NewExpense = () => {
-  const [loading, setLoading] = useState(false)
-
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [selectedSite, setSelectedSite] = useState<Site>({} as Site)
-  const [selectedPerson, setSelectedPerson] = useState<Person>({} as Person)
+const ExpenseNew = ({ sites, persons }: NewExpenseProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [readOnly, setReadOnly] = useState(false)
   const [values, setValues] = useState<Expense>({
+    date: new Date(),
     mode: "Cash",
   } as Expense)
 
@@ -61,18 +56,44 @@ const NewExpense = () => {
     })
   }
 
+  const handleDateChange = (newDate: Date | null) => {
+    if (!newDate) return
+    setValues({
+      ...values,
+      date: newDate,
+    })
+  }
+
   const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
     (e.target as EventTarget & HTMLDivElement).blur()
 
-  const handleAddExpense = () => {
-    setLoading(true)
-    // console.log(selectedDate)
-    // console.log(selectedSite)
-    // console.log(selectedPerson)
-    // console.log(values)
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
+  const handleAddExpense = async () => {
+    setIsLoading(true)
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+    const res = await fetch("/api/expense", requestOptions)
+
+    if (res.status === 200) {
+      setValues({
+        ...values,
+        _id: (await res.json())._id,
+      })
+      setReadOnly(true)
+    }
+    setIsLoading(false)
+  }
+
+  const props = {
+    fullWidth: true,
+    onChange: handleInputChange,
+    disabled: isLoading,
+    inputProps: {
+      readOnly,
+    },
   }
 
   return (
@@ -101,12 +122,11 @@ const NewExpense = () => {
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
                     <DateTimePicker
-                      disabled={loading}
-                      label="Pick a date"
-                      value={selectedDate}
-                      onChange={(newDate) => {
-                        setSelectedDate(newDate || new Date())
-                      }}
+                      disabled={isLoading}
+                      readOnly={readOnly}
+                      label="Date of Expense"
+                      value={values.date}
+                      onChange={handleDateChange}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />
                       )}
@@ -114,21 +134,20 @@ const NewExpense = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Expense Subject"
                       name="subject"
-                      onChange={handleInputChange}
                       value={values.subject}
+                      {...props}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    {/* DROP DOWN WITH DEFAULT "CASH" */}
                     <FormControl fullWidth>
                       <InputLabel htmlFor="payment-mode">
                         Payment Mode
                       </InputLabel>
                       <Select
+                        disabled={isLoading}
+                        readOnly={readOnly}
                         id="payment-mode"
                         value={values.mode}
                         onChange={handleSelectChange}
@@ -144,36 +163,38 @@ const NewExpense = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Expense Amount (in ₹)"
                       name="amount"
-                      onChange={handleInputChange}
                       value={values.amount}
+                      helperText={numWords(values.amount)}
+                      {...props}
                       type="number"
                       onWheel={handleWheel}
                     />
                   </Grid>
                   <Grid item xs={12} md={8}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Remarks"
                       name="remarks"
-                      onChange={handleInputChange}
                       value={values.remarks}
+                      multiline
+                      {...props}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <Autocomplete
                       disablePortal
-                      disabled={loading}
+                      disabled={isLoading}
+                      readOnly={readOnly}
                       id="site"
                       options={sites}
-                      getOptionLabel={(option) => option.name || ""}
-                      value={selectedSite}
-                      onChange={(event, value, reason) =>
-                        setSelectedSite(value || ({} as Site))
+                      getOptionLabel={(option) => option.name}
+                      value={values.site as unknown as Site}
+                      onChange={(e, value, r) =>
+                        setValues({
+                          ...values,
+                          site: value as unknown as Entity,
+                        })
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Site" />
@@ -183,32 +204,57 @@ const NewExpense = () => {
                   <Grid item xs={12} md={8}>
                     <Autocomplete
                       disablePortal
-                      disabled={loading}
+                      disabled={isLoading}
+                      readOnly={readOnly}
                       id="person"
                       options={persons}
                       getOptionLabel={(option) =>
                         option.name ? `${option.name} | ${option.contact}` : ""
                       }
-                      value={selectedPerson}
-                      onChange={(event, value, reason) =>
-                        setSelectedPerson(value || ({} as Person))
+                      value={values.person as unknown as Person}
+                      onChange={(e, value, r) =>
+                        setValues({
+                          ...values,
+                          person: value as unknown as Entity,
+                        })
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Person" />
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={4} />
                   <Grid item xs={12} md={4}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      disabled={loading}
-                      onClick={handleAddExpense}
-                    >
-                      Add Expense
-                    </Button>
+                    {readOnly && (
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        href="/admin/expense/new"
+                        startIcon={<RestartAlt />}
+                      >
+                        Add another
+                      </Button>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    {readOnly ? (
+                      <TextField
+                        label="Person ID"
+                        name="_id"
+                        value={values._id}
+                        {...props}
+                      />
+                    ) : (
+                      <LoadingButton
+                        fullWidth
+                        variant="contained"
+                        onClick={handleAddExpense}
+                        loading={isLoading}
+                        loadingPosition="start"
+                        startIcon={<Save />}
+                      >
+                        Add Expense
+                      </LoadingButton>
+                    )}
                   </Grid>
                   <Grid item xs={12} md={4} />
                 </Grid>
@@ -221,6 +267,32 @@ const NewExpense = () => {
   )
 }
 
-NewExpense.layout = SidebarLayout
+ExpenseNew.layout = SidebarLayout
 
-export default NewExpense
+const getServerSideProps = async ({ res }: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
+  const activeSites = await getActiveSites()
+  const sites = JSON.parse(JSON.stringify(activeSites))
+  const activePersons = await getActivePersons()
+  const persons = JSON.parse(JSON.stringify(activePersons))
+
+  if (activeSites.length === 0 && activePersons.length === 0) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: {
+      sites,
+      persons,
+    },
+  }
+}
+
+export { getServerSideProps }
+export default ExpenseNew

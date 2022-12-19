@@ -27,6 +27,16 @@ const getSites = async () => {
   return result as Site[]
 }
 
+const getActiveSites = async () => {
+  const collection = await siteCollection()
+  const result = await collection
+    .find({ isActive: true })
+    .sort({ completionDate: -1 })
+    .toArray()
+
+  return result as Site[]
+}
+
 const getSite = async (id: string) => {
   const o_id = new ObjectId(id)
   const collection = await siteCollection()
@@ -45,4 +55,4 @@ const updateSite = async (site: Site) => {
   return result
 }
 
-export { addSite, getSites, getSite, updateSite }
+export { addSite, getSites, getSite, getActiveSites, updateSite }

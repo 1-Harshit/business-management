@@ -4,11 +4,13 @@ import { Entity } from "./entity"
 
 export interface Expense {
   _id: ObjectId
+  createdAt: Date
+  updatedAt: Date
   date: Date
   subject: string
-  mode: string
   amount: number
-  remarks: string
   site: Entity
   person: Entity
+  mode: string
+  remarks: string
 }

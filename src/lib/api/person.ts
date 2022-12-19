@@ -27,6 +27,16 @@ const getPersons = async () => {
   return result as Person[]
 }
 
+const getActivePersons = async () => {
+  const collection = await personCollection()
+  const result = await collection
+    .find({ isActive: true })
+    .sort({ completionDate: -1 })
+    .toArray()
+
+  return result as Person[]
+}
+
 const getPerson = async (id: string) => {
   const o_id = new ObjectId(id)
   const collection = await personCollection()
@@ -48,4 +58,4 @@ const updatePerson = async (person: Person) => {
   return result
 }
 
-export { addPerson, getPersons, getPerson, updatePerson }
+export { addPerson, getPersons, getPerson, getActivePersons, updatePerson }

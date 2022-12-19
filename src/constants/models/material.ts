@@ -8,8 +8,8 @@ export interface Material {
   item: string
   billNo: string
   quantity: number
-  materialPerson: Entity
-  transportPerson: Entity
+  materialP: Entity
+  transportP: Entity
   site: Entity
   remarks: string
 }
