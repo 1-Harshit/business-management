@@ -16,19 +16,9 @@ import PageTitle from "src/components/PageTitle"
 import { Material, Person, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
-const sites: Site[] = [
-  { name: "Swiggy", ID: 1 },
-  { name: "Zomato", ID: 2 },
-  { name: "Uber Eats", ID: 3 },
-  { name: "Food Panda", ID: 4 },
-] as Site[]
+const sites: Site[] = [] as Site[]
 
-const persons: Person[] = [
-  { name: "Rahul", ID: 1, contact: "1234567890" },
-  { name: "Shubham", ID: 2, contact: "1234567890" },
-  { name: "Rohit", ID: 3, contact: "1234567890" },
-  { name: "Somya", ID: 4, contact: "1234567890" },
-] as Person[]
+const persons: Person[] = [] as Person[]
 
 const NewMaterial = () => {
   const [loading, setLoading] = useState(false)
@@ -138,7 +128,7 @@ const NewMaterial = () => {
                       label="Material Rate (in ₹)"
                       name="material_rate"
                       onChange={handleInputChange}
-                      value={values.materialRate}
+                      value={values.materialP.rate}
                       type="number"
                       onWheel={handleWheel}
                     />
@@ -150,7 +140,7 @@ const NewMaterial = () => {
                       label="Transport Rate (in ₹)"
                       name="transport_rate"
                       onChange={handleInputChange}
-                      value={values.transportRate}
+                      value={values.materialP.rate}
                       type="number"
                       onWheel={handleWheel}
                     />

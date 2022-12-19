@@ -18,67 +18,9 @@ import DataGrid from "src/components/DataGrid"
 import { Expense, Material } from "src/constants/models"
 import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
 
-const expenseRows = [
-  {
-    ID: 1,
-    date: new Date("2021-09-01"),
-    subject: "Food",
-    amount: 1000.0,
-    person: { name: "Rahul", ID: 5 },
-    site: { name: "Swiggy", ID: 1 },
-    remarks: "Food for 2 peop000le",
-    mode: "Cash",
-  },
-  {
-    ID: 2,
-    date: new Date("2021-09-01"),
-    subject: "Food",
-    amount: 56500,
-    person: { name: "Rahul", ID: 55 },
-    site: { name: "Swiggy", ID: 1 },
-    remarks: "Food for 2 people",
-    mode: "UPI",
-  },
-  {
-    ID: 3,
-    date: new Date("2021-09-01"),
-    subject: "Food",
-    amount: 14654600,
-    site: { name: "Swiggy", ID: 1 },
-    remarks:
-      "Food for 2 peamdsfgijdkaldbgsflkjasbdhufkjadashdkdbfnhvujkbsdsnfdhnbsnaslijdknople",
-    mode: "Cash",
-  },
-] as Expense[]
+const expenseRows = [] as Expense[]
 
-const materialRows = [
-  {
-    ID: 1,
-    date: new Date("2021-09-01"),
-    item: "Sand",
-    quantity: 2,
-    remarks: "Hello",
-    billNo: "5659",
-    site: { name: "Site 1", ID: 1 },
-    materialPerson: { name: "Rahul", ID: 5 },
-    transportPerson: { name: "Rahul", ID: 5 },
-    materialRate: 1000,
-    transportRate: 100,
-  },
-  {
-    ID: 2,
-    date: new Date("2021-09-01"),
-    item: "Stone",
-    quantity: 1,
-    remarks: "Hello All",
-    billNo: "5659s",
-    site: { name: "Site 2", ID: 2 },
-    materialPerson: { name: "Other Rahul", ID: 6 },
-    transportPerson: { name: "Another Other Rahul", ID: 7 },
-    materialRate: 1523,
-    transportRate: 170,
-  },
-] as Material[]
+const materialRows = [] as Material[]
 
 // MAIN COMPONENT
 const DailyExpenses = () => {
