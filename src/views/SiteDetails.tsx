@@ -111,10 +111,8 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <TextField
             label="BOQ Cost"
             name="boqCost"
-            value={site.boqCost}
-            helperText={numWords(site.boqCost)}
-            type="number"
-            onWheel={handleWheel}
+            value={numWords(site.boqCost)}
+            multiline
             {...props}
           />
         </Grid>
@@ -137,10 +135,8 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <TextField
             label="Estimated Cost"
             name="estimatedCost"
-            value={site.estimatedCost}
-            helperText={numWords(site.estimatedCost)}
-            type="number"
-            onWheel={handleWheel}
+            value={numWords(site.estimatedCost)}
+            multiline
             {...props}
           />
         </Grid>
@@ -148,10 +144,8 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <TextField
             label="Agreement Value"
             name="agreementValue"
-            value={site.agreementValue}
-            helperText={numWords(site.agreementValue)}
-            type="number"
-            onWheel={handleWheel}
+            value={numWords(site.agreementValue)}
+            multiline
             {...props}
           />
         </Grid>

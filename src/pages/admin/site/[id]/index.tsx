@@ -1,7 +1,6 @@
 import { Box, Card, Container, Grid, Typography } from "@mui/material"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
-import { useState } from "react"
 
 import DataGrid from "src/components/DataGrid"
 import PageTitle from "src/components/PageTitle"
