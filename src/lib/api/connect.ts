@@ -1,6 +1,6 @@
 import clientPromise from "../mongodb"
 
-export default async function connectToDatabase() {
+const connectToDatabase = async () => {
   const client = await clientPromise
   const db = client.db("biz")
 
@@ -25,3 +25,5 @@ export {
   expenseCollection,
   materialCollection,
 }
+
+export default connectToDatabase

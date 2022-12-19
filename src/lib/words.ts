@@ -40,13 +40,12 @@ const regex = /^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/
 const getLT20 = (n: string) => a[Number(n)]
 const getGT20 = (n: string) => `${b[Number(n[0])]} ${a[Number(n[1])]}`
 
-function toTitleCase(str: string) {
-  return str.replace(/\w\S*/g, (txt) =>
+const toTitleCase = (str: string) =>
+  str.replace(/\w\S*/g, (txt) =>
     txt === "and"
       ? txt
       : txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   )
-}
 
 const numWords = (input: number) => {
   const num = Number(input)

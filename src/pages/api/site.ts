@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import { Site } from "src/constants/models"
 import parse from "src/lib/parse"
-import { addSite, getSites, updateSite } from "src/lib/api/site"
+import { Site } from "src/constants/models"
+import { addSite, updateSite } from "src/lib/api/site"
 
-export default async function handler(
+const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<Site[] | Site | { error: string }>
-) {
+) => {
   try {
     switch (req.method) {
       case "POST": {
@@ -30,7 +29,10 @@ export default async function handler(
       default:
         res.status(405).end()
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     res.status(500).json({ error: e.message })
   }
 }
+
+export default handler
