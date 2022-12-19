@@ -1,8 +1,16 @@
 import { LoadingButton } from "@mui/lab"
-import { Card, Container, Grid, TextField, Typography } from "@mui/material"
+import {
+  Button,
+  Card,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material"
 import Head from "next/head"
 import { ChangeEvent, useState } from "react"
 import SaveIcon from "@mui/icons-material/Save"
+import { ArrowBack } from "@mui/icons-material"
 
 import PageTitle from "src/components/PageTitle"
 import { Person } from "src/constants/models"
@@ -11,6 +19,7 @@ import SidebarLayout from "src/layouts/SidebarLayout"
 const PersonNew = () => {
   const [values, setValues] = useState<Person>({} as Person)
   const [isLoading, setIsLoading] = useState(false)
+  const [readOnly, setReadOnly] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -20,12 +29,35 @@ const PersonNew = () => {
     })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
-    // console.log(values)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+
+    const res = await fetch("/api/person", requestOptions)
+
+    if (res.status === 200) {
+      setValues({
+        ...values,
+        _id: (await res.json())._id,
+      })
+      setReadOnly(true)
+    }
+    setIsLoading(false)
+  }
+
+  const props = {
+    required: true,
+    fullWidth: true,
+    onChange: handleInputChange,
+    disabled: isLoading,
+    inputProps: {
+      readOnly,
+    },
   }
 
   return (
@@ -45,56 +77,68 @@ const PersonNew = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <TextField
-                fullWidth
                 label="Name"
                 name="name"
-                onChange={handleInputChange}
                 value={values.name}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
             <Grid item xs={12} md={8}>
               <TextField
-                fullWidth
                 label="Address"
                 name="address"
-                onChange={handleInputChange}
                 value={values.address}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
-                fullWidth
                 label="Contact"
                 name="contact"
-                onChange={handleInputChange}
                 value={values.contact}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
             <Grid item xs={12} md={8}>
               <TextField
-                fullWidth
                 label="Comments"
                 name="comments"
-                onChange={handleInputChange}
                 value={values.comments}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
-            <Grid item xs={12} md={4} />
             <Grid item xs={12} md={4}>
-              <LoadingButton
-                variant="contained"
-                fullWidth
-                loading={isLoading}
-                onClick={handleSubmit}
-                loadingPosition="start"
-                startIcon={<SaveIcon />}
-              >
-                Add Person
-              </LoadingButton>
+              {readOnly && (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  href="/admin/persons"
+                  startIcon={<ArrowBack />}
+                >
+                  Back to Persons
+                </Button>
+              )}
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {readOnly ? (
+                <TextField
+                  label="Person ID"
+                  name="_id"
+                  value={values._id}
+                  {...props}
+                />
+              ) : (
+                <LoadingButton
+                  fullWidth
+                  variant="contained"
+                  onClick={handleSubmit}
+                  loading={isLoading}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                >
+                  Add Person
+                </LoadingButton>
+              )}
             </Grid>
           </Grid>
         </Card>

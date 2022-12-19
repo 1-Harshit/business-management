@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab"
 import {
+  Button,
   Card,
   Container,
   FormControl,
@@ -14,6 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import Head from "next/head"
 import SaveIcon from "@mui/icons-material/Save"
 import { ChangeEvent, WheelEvent, useState } from "react"
+import { ArrowBack } from "@mui/icons-material"
 
 import PageTitle from "src/components/PageTitle"
 import { Site } from "src/constants/models"
@@ -236,12 +238,23 @@ const SiteNew = () => {
                 required={false}
               />
             </Grid>
-            <Grid item xs={12} md={4} />
+            <Grid item xs={12} md={4}>
+              {readOnly && (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  href="/admin/sites"
+                  startIcon={<ArrowBack />}
+                >
+                  Back to Sites
+                </Button>
+              )}
+            </Grid>
             <Grid item xs={12} md={4}>
               {readOnly ? (
                 <TextField
                   label="Site ID"
-                  name="siteId"
+                  name="_id"
                   value={values._id}
                   {...props}
                 />

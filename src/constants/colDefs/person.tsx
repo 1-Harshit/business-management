@@ -6,11 +6,10 @@ import { MIN_WIDTH, gridCellTooltip } from "./base"
 
 const personsColDef: GridColDef[] = [
   {
-    field: "ID",
+    field: "_id",
     headerName: "ID",
     flex: 0.3,
     minWidth: 0.3 * MIN_WIDTH,
-    type: "number",
   },
   {
     field: "createdAt",

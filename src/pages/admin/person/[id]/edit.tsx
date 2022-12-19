@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab"
 import {
+  Button,
   Card,
   Container,
   Grid,
@@ -10,20 +11,18 @@ import {
 import Head from "next/head"
 import { ChangeEvent, useState } from "react"
 import SaveIcon from "@mui/icons-material/Save"
+import { ArrowBack } from "@mui/icons-material"
 
 import PageTitle from "src/components/PageTitle"
 import { Person } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
-const PersonEdit = () => {
-  const [values, setValues] = useState<Person>({
-    name: "Harshit",
-    contact: "7992241",
-    address: "Chatra",
-    comments: "nothing",
-    isActive: true,
-  } as Person)
+import { getServerSideProps } from "."
+
+const PersonEdit = ({ person }: { person: Person }) => {
+  const [values, setValues] = useState<Person>(person)
   const [isLoading, setIsLoading] = useState(false)
+  const [readOnly, setReadOnly] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -33,12 +32,31 @@ const PersonEdit = () => {
     })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
-    // console.log(values)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+
+    const res = await fetch(`/api/person`, requestOptions)
+
+    if (res.status === 200) {
+      setReadOnly(true)
+    }
+
+    setIsLoading(false)
+  }
+
+  const props = {
+    fullWidth: true,
+    onChange: handleInputChange,
+    disabled: isLoading,
+    inputProps: {
+      readOnly,
+    },
   }
 
   return (
@@ -48,7 +66,7 @@ const PersonEdit = () => {
       </Head>
       <PageTitle
         heading={`Editing data of ${values.name}`}
-        subHeading={`Edit Person with id ${values.ID}`}
+        subHeading={`Edit Person with id ${values._id}`}
       />
       <Container maxWidth="lg">
         <Card sx={{ p: { xs: 2, md: 4 } }}>
@@ -80,6 +98,7 @@ const PersonEdit = () => {
                     isActive: checked,
                   })
                 }}
+                disabled={isLoading || readOnly}
                 name="isActive"
                 color="primary"
                 inputProps={{ "aria-label": "controlled" }}
@@ -89,56 +108,68 @@ const PersonEdit = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <TextField
-                fullWidth
                 label="Name"
                 name="name"
-                onChange={handleInputChange}
                 value={values.name}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
             <Grid item xs={12} md={8}>
               <TextField
-                fullWidth
                 label="Address"
                 name="address"
-                onChange={handleInputChange}
                 value={values.address}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
-                fullWidth
                 label="Contact"
                 name="contact"
-                onChange={handleInputChange}
                 value={values.contact}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
             <Grid item xs={12} md={8}>
               <TextField
-                fullWidth
                 label="Comments"
                 name="comments"
-                onChange={handleInputChange}
                 value={values.comments}
-                disabled={isLoading}
+                {...props}
               />
             </Grid>
-            <Grid item xs={12} md={4} />
             <Grid item xs={12} md={4}>
-              <LoadingButton
-                fullWidth
-                variant="contained"
-                onClick={handleSubmit}
-                loading={isLoading}
-                loadingPosition="start"
-                startIcon={<SaveIcon />}
-              >
-                Save Changes
-              </LoadingButton>
+              {readOnly && (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  href={`/admin/person/${values._id}`}
+                  startIcon={<ArrowBack />}
+                >
+                  Back
+                </Button>
+              )}
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {readOnly ? (
+                <TextField
+                  label="Site ID"
+                  name="siteId"
+                  value={values._id}
+                  {...props}
+                />
+              ) : (
+                <LoadingButton
+                  fullWidth
+                  variant="contained"
+                  onClick={handleSubmit}
+                  loading={isLoading}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                >
+                  Save Person
+                </LoadingButton>
+              )}
             </Grid>
           </Grid>
         </Card>
@@ -149,4 +180,5 @@ const PersonEdit = () => {
 
 PersonEdit.layout = SidebarLayout
 
+export { getServerSideProps }
 export default PersonEdit

@@ -1,3 +1,4 @@
-import Persons from "./person"
+import Persons, { getServerSideProps } from "./person"
 
+export { getServerSideProps }
 export default Persons

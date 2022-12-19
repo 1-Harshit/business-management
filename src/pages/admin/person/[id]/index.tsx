@@ -1,6 +1,7 @@
 import { Box, Card, Container, Grid, Typography } from "@mui/material"
 import Head from "next/head"
 import { useState } from "react"
+import { GetServerSidePropsContext } from "next"
 
 import PageTitle from "src/components/PageTitle"
 import { Person } from "src/constants/models"
@@ -8,16 +9,13 @@ import SidebarLayout from "src/layouts/SidebarLayout"
 import PersonDetails from "src/views/PersonDetails"
 import DataGrid from "src/components/DataGrid"
 import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
+import { getPerson } from "src/lib/api/person"
 
-const PersonEdit = () => {
-  const [values, setValues] = useState<Person>({
-    name: "Harshit",
-    contact: "7992241",
-    address: "Chatra",
-    comments: "nothing",
-    isActive: true,
-  } as Person)
+interface PersonIndexProps {
+  person: Person
+}
 
+const PersonIndex = ({ person }: PersonIndexProps) => {
   const expenses = (
     <Card>
       <Box p={4}>
@@ -62,15 +60,15 @@ const PersonEdit = () => {
         <title>Person Wise Ledger</title>
       </Head>
       <PageTitle
-        heading={`Viewing Ledger of ${values.name}`}
+        heading={`Viewing Ledger of ${person.name}`}
         subHeading="Find all the transaction recorded to this person"
         sideText="Edit details"
-        sideTextLink={`/admin/person/${values.ID}/edit`}
+        sideTextLink={`/admin/person/${person._id}/edit`}
       />
       <Container maxWidth="lg">
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <PersonDetails person={values} />
+            <PersonDetails person={person} />
           </Grid>
           <Grid item xs={12}>
             {expenses}
@@ -84,6 +82,31 @@ const PersonEdit = () => {
   )
 }
 
-PersonEdit.layout = SidebarLayout
+PersonIndex.layout = SidebarLayout
 
-export default PersonEdit
+export const getServerSideProps = async ({
+  res,
+  query,
+}: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
+  const id = query.id as string
+  const result = await getPerson(id)
+  if (result === null) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const person = JSON.parse(JSON.stringify(result))
+  return {
+    props: {
+      person,
+    },
+  }
+}
+
+export default PersonIndex

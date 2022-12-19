@@ -79,7 +79,7 @@ const PersonDetails = ({ person }: PersonDetailsProps) => (
           inputProps={{ readOnly: true }}
           label="Created At"
           name="createdAt"
-          value={person.createdAt}
+          value={new Date(person.createdAt).toLocaleString()}
         />
       </Grid>
       <Grid item xs={12} md={4}>
@@ -88,7 +88,7 @@ const PersonDetails = ({ person }: PersonDetailsProps) => (
           inputProps={{ readOnly: true }}
           label="Updated At"
           name="updatedAt"
-          value={person.updatedAt}
+          value={new Date(person.updatedAt).toLocaleString()}
         />
       </Grid>
       <Grid item xs={12} md={4}>
@@ -97,7 +97,7 @@ const PersonDetails = ({ person }: PersonDetailsProps) => (
           inputProps={{ readOnly: true }}
           label="Person ID"
           name="personId"
-          value={person.ID}
+          value={person._id}
         />
       </Grid>
     </Grid>

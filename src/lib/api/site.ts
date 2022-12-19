@@ -9,6 +9,7 @@ import { siteCollection } from "./connect"
 const addSite = async (site: Site) => {
   site.createdAt = new Date()
   site.updatedAt = new Date()
+  site.isActive = true
 
   const collection = await siteCollection()
   const result = collection.insertOne(site)

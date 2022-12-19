@@ -16,14 +16,14 @@ import { DatePicker } from "@mui/x-date-pickers"
 import Head from "next/head"
 import SaveIcon from "@mui/icons-material/Save"
 import { ChangeEvent, WheelEvent, useState } from "react"
-import { GetServerSidePropsContext } from "next"
 import { ArrowBack } from "@mui/icons-material"
 
 import PageTitle from "src/components/PageTitle"
 import { Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
-import { getSite } from "src/lib/api/site"
 import numWords from "src/lib/words"
+
+import { getServerSideProps } from "."
 
 const SiteEdit = ({ site }: { site: Site }) => {
   const [values, setValues] = useState<Site>(site)
@@ -52,6 +52,7 @@ const SiteEdit = ({ site }: { site: Site }) => {
     if (res.status === 200) {
       setReadOnly(true)
     }
+    setIsLoading(false)
   }
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
@@ -307,29 +308,6 @@ const SiteEdit = ({ site }: { site: Site }) => {
 
 SiteEdit.layout = SidebarLayout
 
-export const getServerSideProps = async ({
-  res,
-  query,
-}: GetServerSidePropsContext) => {
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=10, stale-while-revalidate=59"
-  )
-
-  const id = query.id as string
-  const result = await getSite(id)
-  if (result === null) {
-    return {
-      notFound: true,
-    }
-  }
-
-  const site = JSON.parse(JSON.stringify(result))
-  return {
-    props: {
-      site,
-    },
-  }
-}
+export { getServerSideProps }
 
 export default SiteEdit
