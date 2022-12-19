@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import { Site } from "src/constants/models"
-import parse from "src/constants/models/parse"
+import parse from "src/lib/parse"
 import { addSite, getSites, updateSite } from "src/lib/api/site"
 
 export default async function handler(

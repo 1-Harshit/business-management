@@ -1,9 +1,6 @@
 import { ObjectId } from "mongodb"
 
-import { Expense } from "./expense"
-import { Material } from "./material"
-import { Person } from "./person"
-import { Site } from "./site"
+import { Expense, Material, Person, Site } from "src/constants/models"
 
 const parseSite = (site: Site) => {
   let ret = site
