@@ -1,12 +1,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/prefer-default-export */
+import { ObjectId } from "mongodb"
+
 import { Site } from "src/constants/models"
 
 import { siteCollection } from "./connect"
 
 const addSite = async (site: Site) => {
-  site.CreatedAt = new Date()
-  site.UpdatedAt = new Date()
+  site.createdAt = new Date()
+  site.updatedAt = new Date()
 
   const collection = await siteCollection()
   const result = collection.insertOne(site)
@@ -24,9 +26,17 @@ const getSites = async () => {
   return result as Site[]
 }
 
+const getSite = async (id: string) => {
+  const o_id = new ObjectId(id)
+  const collection = await siteCollection()
+  const result = await collection.findOne({ _id: o_id })
+
+  return result as Site
+}
+
 const updateSite = async (site: Site) => {
   if (!site._id) throw new Error("No site id provided")
-  site.UpdatedAt = new Date()
+  site.updatedAt = new Date()
 
   const collection = await siteCollection()
   const result = await collection.updateOne({ _id: site._id }, { $set: site })
@@ -34,4 +44,4 @@ const updateSite = async (site: Site) => {
   return result
 }
 
-export { addSite, getSites, updateSite }
+export { addSite, getSites, getSite, updateSite }

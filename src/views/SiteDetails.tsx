@@ -13,6 +13,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import { WheelEvent } from "react"
 
 import { Site } from "src/constants/models"
+import numWords from "src/lib/words"
 
 interface SiteDetailsProps {
   site: Site
@@ -111,6 +112,7 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
             label="BOQ Cost"
             name="boqCost"
             value={site.boqCost}
+            helperText={numWords(site.boqCost)}
             type="number"
             onWheel={handleWheel}
             {...props}
@@ -129,23 +131,25 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <TextField label="Fund" name="fund" value={site.fund} {...props} />
         </Grid>
         <Grid item xs={12} md={4}>
+          <TextField label="Rate" name="rate" value={site.rate} {...props} />
+        </Grid>
+        <Grid item xs={12} md={4}>
           <TextField
             label="Estimated Cost"
             name="estimatedCost"
             value={site.estimatedCost}
+            helperText={numWords(site.estimatedCost)}
             type="number"
             onWheel={handleWheel}
             {...props}
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <TextField label="Rate" name="rate" value={site.rate} {...props} />
-        </Grid>
-        <Grid item xs={12} md={4}>
           <TextField
             label="Agreement Value"
             name="agreementValue"
             value={site.agreementValue}
+            helperText={numWords(site.agreementValue)}
             type="number"
             onWheel={handleWheel}
             {...props}
@@ -169,8 +173,10 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
               label="Agency"
               readOnly
             >
-              <MenuItem value="Cash">Pole Star Enterprises</MenuItem>
-              <MenuItem value="UPI">Manoj Kumar</MenuItem>
+              <MenuItem value="Pole Star Enterprises">
+                Pole Star Enterprises
+              </MenuItem>
+              <MenuItem value="Manoj Kumar">Manoj Kumar</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -187,7 +193,7 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <TextField
             label="Created At"
             name="createdAt"
-            value={site.createdAt}
+            value={new Date(site.createdAt).toLocaleString()}
             {...props}
           />
         </Grid>
@@ -195,12 +201,17 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <TextField
             label="Updated At"
             name="updatedAt"
-            value={site.updatedAt}
+            value={new Date(site.updatedAt).toLocaleString()}
             {...props}
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <TextField label="Site ID" name="siteId" value={site.ID} {...props} />
+          <TextField
+            label="Site ID"
+            name="siteId"
+            value={site._id}
+            {...props}
+          />
         </Grid>
       </Grid>
     </Card>

@@ -19,11 +19,6 @@ export default async function handler(
         else res.status(500).json({ error: "Error adding site" })
         break
       }
-      case "GET": {
-        const sites = await getSites()
-        res.status(200).json(sites)
-        break
-      }
       case "PUT": {
         const site = parse(req.body, "site") as Site
         const result = await updateSite(site)

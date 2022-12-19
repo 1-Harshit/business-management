@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab"
 import {
+  Button,
   Card,
   Container,
   FormControl,
@@ -15,14 +16,19 @@ import { DatePicker } from "@mui/x-date-pickers"
 import Head from "next/head"
 import SaveIcon from "@mui/icons-material/Save"
 import { ChangeEvent, WheelEvent, useState } from "react"
+import { GetServerSidePropsContext } from "next"
+import { ArrowBack } from "@mui/icons-material"
 
 import PageTitle from "src/components/PageTitle"
 import { Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
+import { getSite } from "src/lib/api/site"
+import numWords from "src/lib/words"
 
-const SiteEdit = () => {
-  const [values, setValues] = useState<Site>({} as Site)
+const SiteEdit = ({ site }: { site: Site }) => {
+  const [values, setValues] = useState<Site>(site)
   const [isLoading, setIsLoading] = useState(false)
+  const [readOnly, setReadOnly] = useState(false)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -32,12 +38,20 @@ const SiteEdit = () => {
     })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
-    // console.log(values)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+
+    const res = await fetch(`/api/site`, requestOptions)
+
+    if (res.status === 200) {
+      setReadOnly(true)
+    }
   }
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
@@ -47,6 +61,9 @@ const SiteEdit = () => {
     fullWidth: true,
     onChange: handleInputChange,
     disabled: isLoading,
+    inputProps: {
+      readOnly,
+    },
   }
 
   return (
@@ -56,7 +73,7 @@ const SiteEdit = () => {
       </Head>
       <PageTitle
         heading={`Edit the ${values.name} Construction Site`}
-        subHeading={`Edit the construction site with id ${values.ID}`}
+        subHeading={`Edit the construction site with id ${values._id}`}
       />
       <Container maxWidth="lg">
         <Card sx={{ p: { xs: 2, md: 4 } }}>
@@ -88,6 +105,7 @@ const SiteEdit = () => {
                     isActive: checked,
                   })
                 }}
+                disabled={isLoading || readOnly}
                 name="isActive"
                 color="primary"
                 inputProps={{ "aria-label": "controlled" }}
@@ -156,6 +174,7 @@ const SiteEdit = () => {
                 label="BOQ Cost"
                 name="boqCost"
                 value={values.boqCost}
+                helperText={numWords(values.boqCost)}
                 type="number"
                 onWheel={handleWheel}
                 {...props}
@@ -180,16 +199,6 @@ const SiteEdit = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
-                label="Estimated Cost"
-                name="estimatedCost"
-                value={values.estimatedCost}
-                type="number"
-                onWheel={handleWheel}
-                {...props}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
                 label="Rate"
                 name="rate"
                 value={values.rate}
@@ -198,9 +207,21 @@ const SiteEdit = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
+                label="Estimated Cost"
+                name="estimatedCost"
+                value={values.estimatedCost}
+                helperText={numWords(values.estimatedCost)}
+                type="number"
+                onWheel={handleWheel}
+                {...props}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <TextField
                 label="Agreement Value"
                 name="agreementValue"
                 value={values.agreementValue}
+                helperText={numWords(values.agreementValue)}
                 type="number"
                 onWheel={handleWheel}
                 {...props}
@@ -227,8 +248,10 @@ const SiteEdit = () => {
                   label="Agency"
                   disabled={isLoading}
                 >
-                  <MenuItem value="Cash">Pole Star Enterprises</MenuItem>
-                  <MenuItem value="UPI">Manoj Kumar</MenuItem>
+                  <MenuItem value="Pole Star Enterprises">
+                    Pole Star Enterprises
+                  </MenuItem>
+                  <MenuItem value="Manoj Kumar">Manoj Kumar</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -239,20 +262,41 @@ const SiteEdit = () => {
                 value={values.comments}
                 multiline
                 {...props}
+                required={false}
               />
             </Grid>
-            <Grid item xs={12} md={4} />
             <Grid item xs={12} md={4}>
-              <LoadingButton
-                fullWidth
-                variant="contained"
-                onClick={handleSubmit}
-                loading={isLoading}
-                loadingPosition="start"
-                startIcon={<SaveIcon />}
-              >
-                Save Changes
-              </LoadingButton>
+              {readOnly && (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  href={`/admin/site/${values._id}`}
+                  startIcon={<ArrowBack />}
+                >
+                  Back
+                </Button>
+              )}
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {readOnly ? (
+                <TextField
+                  label="Site ID"
+                  name="siteId"
+                  value={values._id}
+                  {...props}
+                />
+              ) : (
+                <LoadingButton
+                  fullWidth
+                  variant="contained"
+                  onClick={handleSubmit}
+                  loading={isLoading}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                >
+                  Save Site
+                </LoadingButton>
+              )}
             </Grid>
           </Grid>
         </Card>
@@ -262,5 +306,30 @@ const SiteEdit = () => {
 }
 
 SiteEdit.layout = SidebarLayout
+
+export const getServerSideProps = async ({
+  res,
+  query,
+}: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
+  const id = query.id as string
+  const result = await getSite(id)
+  if (result === null) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const site = JSON.parse(JSON.stringify(result))
+  return {
+    props: {
+      site,
+    },
+  }
+}
 
 export default SiteEdit

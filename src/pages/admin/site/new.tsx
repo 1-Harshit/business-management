@@ -18,6 +18,7 @@ import { ChangeEvent, WheelEvent, useState } from "react"
 import PageTitle from "src/components/PageTitle"
 import { Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
+import numWords from "src/lib/words"
 
 const SiteNew = () => {
   const [values, setValues] = useState<Site>({} as Site)
@@ -144,6 +145,7 @@ const SiteNew = () => {
                 label="BOQ Cost"
                 name="boqCost"
                 value={values.boqCost}
+                helperText={numWords(values.boqCost)}
                 type="number"
                 onWheel={handleWheel}
                 {...props}
@@ -168,16 +170,6 @@ const SiteNew = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
-                label="Estimated Cost"
-                name="estimatedCost"
-                value={values.estimatedCost}
-                type="number"
-                onWheel={handleWheel}
-                {...props}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
                 label="Rate"
                 name="rate"
                 value={values.rate}
@@ -186,9 +178,21 @@ const SiteNew = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
+                label="Estimated Cost"
+                name="estimatedCost"
+                value={values.estimatedCost}
+                helperText={numWords(values.estimatedCost)}
+                type="number"
+                onWheel={handleWheel}
+                {...props}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <TextField
                 label="Agreement Value"
                 name="agreementValue"
                 value={values.agreementValue}
+                helperText={numWords(values.agreementValue)}
                 type="number"
                 onWheel={handleWheel}
                 {...props}

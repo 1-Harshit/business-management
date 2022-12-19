@@ -1,4 +1,5 @@
 import { Box, Card, Container, Grid, Typography } from "@mui/material"
+import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 import { useState } from "react"
 
@@ -7,14 +8,14 @@ import PageTitle from "src/components/PageTitle"
 import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
 import { Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
+import { getSite } from "src/lib/api/site"
 import SiteDetails from "src/views/SiteDetails"
 
-const SiteIndex = () => {
-  const [values, setValues] = useState<Site>({
-    name: "Multipurpose Hall",
-    isActive: true,
-  } as Site)
+interface SiteIndexProps {
+  site: Site
+}
 
+const SiteIndex = ({ site }: SiteIndexProps) => {
   const expenses = (
     <Card>
       <Box p={4}>
@@ -58,15 +59,15 @@ const SiteIndex = () => {
         <title>Site wise Ledger</title>
       </Head>
       <PageTitle
-        heading={`Ledger of the ${values.name} Construction Site`}
+        heading={`Ledger of the ${site.name} Construction Site`}
         subHeading="Find all the transaction recorded to this site"
         sideText="Edit details"
-        sideTextLink={`/admin/site/${values.ID}/edit`}
+        sideTextLink={`/admin/site/${site._id}/edit`}
       />
       <Container maxWidth="lg">
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <SiteDetails site={values} />
+            <SiteDetails site={site} />
           </Grid>
           <Grid item xs={12}>
             {expenses}
@@ -81,5 +82,30 @@ const SiteIndex = () => {
 }
 
 SiteIndex.layout = SidebarLayout
+
+export const getServerSideProps = async ({
+  res,
+  query,
+}: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
+  const id = query.id as string
+  const result = await getSite(id)
+  if (result === null) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const site = JSON.parse(JSON.stringify(result))
+  return {
+    props: {
+      site,
+    },
+  }
+}
 
 export default SiteIndex
