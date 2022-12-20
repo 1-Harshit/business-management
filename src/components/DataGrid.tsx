@@ -11,7 +11,11 @@ interface DataGridProps {
 const CustomDataGrid = ({ rows, columns, hiddenColumns }: DataGridProps) => {
   const [pageSize, setPageSize] = useState(25)
 
-  let columnVisibility: { [column: string]: boolean } = {}
+  let columnVisibility: { [column: string]: boolean } = {
+    _id: false,
+    createdAt: false,
+    updatedAt: false,
+  }
 
   if (hiddenColumns) {
     hiddenColumns.forEach((column) => {

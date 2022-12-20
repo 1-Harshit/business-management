@@ -63,10 +63,36 @@ const getDailyExpenses = async (date: Date) => {
   return result as Expense[]
 }
 
+const getExpensesByPerson = async (personId: string) => {
+  const o_id = new ObjectId(personId)
+  const collection = await expenseCollection()
+  const result = await collection
+    .find({
+      "person._id": o_id,
+    })
+    .toArray()
+
+  return result as Expense[]
+}
+
+const getExpensesBySite = async (siteId: string) => {
+  const o_id = new ObjectId(siteId)
+  const collection = await expenseCollection()
+  const result = await collection
+    .find({
+      "site._id": o_id,
+    })
+    .toArray()
+
+  return result as Expense[]
+}
+
 export {
   addExpense,
   updateExpense,
   deleteExpense,
   getExpense,
   getDailyExpenses,
+  getExpensesByPerson,
+  getExpensesBySite,
 }

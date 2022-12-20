@@ -62,10 +62,52 @@ const getDailyMaterials = async (date: Date) => {
   return result as Material[]
 }
 
+const getMaterialsByPerson = async (personId: string) => {
+  const o_id = new ObjectId(personId)
+  const collection = await materialCollection()
+
+  const result = await collection
+    .find({
+      "materialPerson._id": o_id,
+    })
+    .toArray()
+
+  return result as Material[]
+}
+
+const getMaterialsByShipper = async (shipperId: string) => {
+  const o_id = new ObjectId(shipperId)
+  const collection = await materialCollection()
+
+  const result = await collection
+    .find({
+      "shippingPerson._id": o_id,
+    })
+    .toArray()
+
+  return result as Material[]
+}
+
+const getMaterialsBySite = async (siteId: string) => {
+  const o_id = new ObjectId(siteId)
+  const collection = await materialCollection()
+
+  const result = await collection
+    .find({
+      "site._id": o_id,
+    })
+    .toArray()
+
+  return result as Material[]
+}
+
 export {
   addMaterial,
   updateMaterial,
   deleteMaterial,
   getMaterial,
   getDailyMaterials,
+  getMaterialsByPerson,
+  getMaterialsByShipper,
+  getMaterialsBySite,
 }
