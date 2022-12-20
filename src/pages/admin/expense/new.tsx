@@ -189,11 +189,11 @@ const ExpenseNew = ({ sites, persons }: NewExpenseProps) => {
                       id="site"
                       options={sites}
                       getOptionLabel={(option) => option.name}
-                      value={values.site as unknown as Site}
+                      value={values.site as Site}
                       onChange={(e, value, r) =>
                         setValues({
                           ...values,
-                          site: value as unknown as Entity,
+                          site: value as Entity,
                         })
                       }
                       renderInput={(params) => (
@@ -211,11 +211,11 @@ const ExpenseNew = ({ sites, persons }: NewExpenseProps) => {
                       getOptionLabel={(option) =>
                         option.name ? `${option.name} | ${option.contact}` : ""
                       }
-                      value={values.person as unknown as Person}
+                      value={values.person as Person}
                       onChange={(e, value, r) =>
                         setValues({
                           ...values,
-                          person: value as unknown as Entity,
+                          person: value as Entity,
                         })
                       }
                       renderInput={(params) => (
@@ -238,7 +238,7 @@ const ExpenseNew = ({ sites, persons }: NewExpenseProps) => {
                   <Grid item xs={12} md={4}>
                     {readOnly ? (
                       <TextField
-                        label="Person ID"
+                        label="Expense ID"
                         name="_id"
                         value={values._id}
                         {...props}

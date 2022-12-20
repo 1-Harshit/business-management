@@ -26,16 +26,19 @@ const parseExpense = (expense: Expense) => {
   ret._id = new ObjectId(expense._id)
   ret.date = new Date(expense.date)
   ret.amount = Number(expense.amount)
-  if (expense.site?._id)
+
+  if (expense.site?._id) {
     ret.site = {
       _id: new ObjectId(expense.site?._id),
       name: expense.site?.name,
     }
-  if (expense.person?._id)
+  }
+  if (expense.person?._id) {
     ret.person = {
       _id: new ObjectId(expense.person?._id),
       name: expense.person?.name,
     }
+  }
   return ret
 }
 
@@ -44,23 +47,29 @@ const parseMaterial = (material: Material) => {
   ret._id = new ObjectId(material._id)
   ret.date = new Date(material.date)
   ret.quantity = Number(material.quantity)
-  if (material.site?._id)
+  ret.materialRate = Number(material.materialRate)
+
+  if (material.shippingRate) {
+    ret.shippingRate = Number(material.shippingRate)
+  }
+  if (material.site?._id) {
     ret.site = {
       _id: new ObjectId(material.site?._id),
       name: material.site?.name,
     }
-  if (material.materialP?._id)
-    ret.materialP = {
-      _id: new ObjectId(material.materialP?._id),
-      name: material.materialP?.name,
-      rate: Number(material.materialP?.rate),
+  }
+  if (material.materialPerson?._id) {
+    ret.materialPerson = {
+      _id: new ObjectId(material.materialPerson?._id),
+      name: material.materialPerson?.name,
     }
-  if (material.transportP?._id)
-    ret.transportP = {
-      _id: new ObjectId(material.transportP?._id),
-      name: material.transportP?.name,
-      rate: Number(material.transportP?.rate),
+  }
+  if (material.shippingPerson?._id) {
+    ret.shippingPerson = {
+      _id: new ObjectId(material.shippingPerson?._id),
+      name: material.shippingPerson?.name,
     }
+  }
   return ret
 }
 

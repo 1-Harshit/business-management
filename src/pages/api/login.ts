@@ -8,7 +8,7 @@ const handler = async (
   res: NextApiResponse<{ error: string }>
 ) => {
   if (req.method !== "POST") {
-    res.status(405).end()
+    res.status(405).json({ error: "Method not allowed" })
     return
   }
 

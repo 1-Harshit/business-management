@@ -98,7 +98,8 @@ const PersonEdit = ({ person }: { person: Person }) => {
                     isActive: checked,
                   })
                 }}
-                disabled={isLoading || readOnly}
+                disabled={isLoading}
+                readOnly={readOnly}
                 name="isActive"
                 color="primary"
                 inputProps={{ "aria-label": "controlled" }}

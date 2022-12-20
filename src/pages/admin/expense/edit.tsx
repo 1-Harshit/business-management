@@ -203,11 +203,11 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       id="site"
                       options={sites}
                       getOptionLabel={(option) => option.name}
-                      value={values.site as unknown as Site}
+                      value={values.site as Site}
                       onChange={(e, value, r) =>
                         setValues({
                           ...values,
-                          site: value as unknown as Entity,
+                          site: value as Entity,
                         })
                       }
                       renderInput={(params) => (
@@ -225,11 +225,11 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       getOptionLabel={(option) =>
                         option.name ? `${option.name} | ${option.contact}` : ""
                       }
-                      value={values.person as unknown as Person}
+                      value={values.person as Person}
                       onChange={(e, value, r) =>
                         setValues({
                           ...values,
-                          person: value as unknown as Entity,
+                          person: value as Entity,
                         })
                       }
                       renderInput={(params) => (

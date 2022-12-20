@@ -17,7 +17,12 @@ import { Person } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 
 const PersonNew = () => {
-  const [values, setValues] = useState<Person>({} as Person)
+  const [values, setValues] = useState<Person>({
+    name: "",
+    contact: "",
+    comments: "",
+    address: "",
+  } as Person)
   const [isLoading, setIsLoading] = useState(false)
   const [readOnly, setReadOnly] = useState(false)
 

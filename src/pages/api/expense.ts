@@ -8,7 +8,7 @@ import { addExpense, deleteExpense, updateExpense } from "src/lib/api/expense"
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<Expense[] | Expense | { error: string }>
+  res: NextApiResponse<Expense | { error: string }>
 ) => {
   const { user } = req.session
   if (!user) {
@@ -43,7 +43,7 @@ const handler = async (
         break
       }
       default:
-        res.status(405).end()
+        res.status(405).json({ error: "Method not allowed" })
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

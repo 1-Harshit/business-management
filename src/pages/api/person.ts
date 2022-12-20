@@ -8,7 +8,7 @@ import { addPerson, updatePerson } from "src/lib/api/person"
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<Person[] | Person | { error: string }>
+  res: NextApiResponse<Person | { error: string }>
 ) => {
   const { user } = req.session
   if (!user) {
@@ -35,7 +35,7 @@ const handler = async (
         break
       }
       default:
-        res.status(405).end()
+        res.status(405).json({ error: "Method not allowed" })
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
