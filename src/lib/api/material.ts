@@ -16,21 +16,6 @@ const addMaterial = async (material: Material) => {
   return result
 }
 
-const getMaterials = async () => {
-  const collection = await materialCollection()
-  const result = await collection.find({}).sort({ date: -1 }).toArray()
-
-  return result as Material[]
-}
-
-const getMaterial = async (id: string) => {
-  const o_id = new ObjectId(id)
-  const collection = await materialCollection()
-  const result = await collection.findOne({ _id: o_id })
-
-  return result as Material
-}
-
 const updateMaterial = async (material: Material) => {
   if (!material._id) throw new Error("No material id provided")
   material.updatedAt = new Date()
@@ -54,10 +39,33 @@ const deleteMaterial = async (id: string) => {
   return result
 }
 
+const getMaterial = async (id: string) => {
+  const o_id = new ObjectId(id)
+  const collection = await materialCollection()
+  const result = await collection.findOne({ _id: o_id })
+
+  return result as Material
+}
+const getDailyMaterials = async (date: Date) => {
+  const queryDate = new Date(date)
+
+  const collection = await materialCollection()
+  const result = await collection
+    .find({
+      date: {
+        $gte: new Date(queryDate),
+        $lt: new Date(queryDate.setDate(date.getDate() + 1)),
+      },
+    })
+    .toArray()
+
+  return result as Material[]
+}
+
 export {
   addMaterial,
-  getMaterials,
-  getMaterial,
   updateMaterial,
   deleteMaterial,
+  getMaterial,
+  getDailyMaterials,
 }

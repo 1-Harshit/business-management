@@ -1,10 +1,10 @@
 import { Grid, IconButton, Tooltip, Typography } from "@mui/material"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 
-const MIN_WIDTH = 150
+const MIN_WIDTH = 175
 
 // Render Amount in format ₹1,56,756.56
-const renderAmount = (amount: string | number) =>
+const formatAmount = (amount: string | number) =>
   `₹${Number(amount).toLocaleString("en-IN", {
     maximumFractionDigits: 2,
     minimumFractionDigits: 0,
@@ -12,15 +12,15 @@ const renderAmount = (amount: string | number) =>
 
 // Cell with link and rate
 const gridCell = (
-  { name = "NA", ID = 0 }: { name: string; ID: number },
+  { name = "-", _id = "" }: { name: string; _id: string },
   type: string,
   rate?: number
 ) => (
   <Grid container spacing={0}>
     <Grid item xs={12}>
       {name}{" "}
-      {ID !== 0 && (
-        <IconButton href={`/admin/${type}/${ID}`}>
+      {_id && (
+        <IconButton href={`/admin/${type}/${_id}`}>
           <OpenInNewIcon sx={{ fontSize: 13 }} color="disabled" />
         </IconButton>
       )}
@@ -28,7 +28,7 @@ const gridCell = (
     {rate && (
       <Grid item xs={12}>
         <Typography variant="caption" color="text.secondary">
-          @{renderAmount(rate)}
+          @{formatAmount(rate)}
         </Typography>
       </Grid>
     )}
@@ -41,12 +41,24 @@ const gridCellTooltip = (text: string) => {
     return (
       <Tooltip title={text}>
         <Typography>
-          {text.substring(0, 20)}
-          {text.length > 20 && "..."}
+          {text.substring(0, 23)}
+          {text.length > 23 && "..."}
         </Typography>
       </Tooltip>
     )
-  return <Typography>NA</Typography>
+  return <Typography>-</Typography>
 }
 
-export { gridCell, gridCellTooltip, renderAmount, MIN_WIDTH }
+const formatDate = (date: string) => {
+  const dateObj = new Date(date)
+  const now = new Date()
+
+  if (dateObj.toString() === "Invalid Date") return date
+
+  if (dateObj.toDateString() === now.toDateString())
+    return dateObj.toLocaleTimeString()
+
+  return dateObj.toLocaleString()
+}
+
+export { gridCell, gridCellTooltip, formatAmount, formatDate, MIN_WIDTH }

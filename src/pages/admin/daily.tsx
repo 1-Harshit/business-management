@@ -11,20 +11,42 @@ import Head from "next/head"
 import { DatePicker } from "@mui/x-date-pickers"
 import { useState } from "react"
 import moment from "moment"
+import { GetServerSidePropsContext } from "next"
 
 import SidebarLayout from "src/layouts/SidebarLayout"
 import PageTitle from "src/components/PageTitle"
 import DataGrid from "src/components/DataGrid"
 import { Expense, Material } from "src/constants/models"
 import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
+import { getDailyExpenses } from "src/lib/api/expense"
+import { getDailyMaterials } from "src/lib/api/material"
 
-const expenseRows = [] as Expense[]
+interface DailyExpensesProps {
+  date: string
+  expenses: Expense[]
+  materials: Material[]
+}
 
-const materialRows = [] as Material[]
+const getAmount = (material: Material) => {
+  const materialRate = material.materialRate || 0
+  const shippingRate = material.shippingRate || 0
+  const rate = materialRate + shippingRate
+  const quantity = material.quantity || 0
+  return rate * quantity
+}
 
-// MAIN COMPONENT
-const DailyExpenses = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+const DailyExpenses = ({ date, expenses, materials }: DailyExpensesProps) => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(date))
+
+  const totalExpenses = expenses.reduce(
+    (acc, curr) => acc + Number(curr.amount) || 0,
+    0
+  )
+
+  const totalMaterials = materials.reduce(
+    (acc, curr) => acc + getAmount(curr),
+    0
+  )
 
   const dateSelector = (
     <Card>
@@ -38,10 +60,13 @@ const DailyExpenses = () => {
               's Expenses
             </Typography>
             <Typography color="text.secondary">
-              Here are all expenses of {selectedDate.toDateString()}.
+              Here are all expenses of {selectedDate.toDateString()}.{" "}
             </Typography>
             <Typography variant="h3" sx={{ pt: 2 }}>
-              Total Expenses: ₹54,584.23
+              Total Expenses: ₹{totalExpenses.toLocaleString()}
+            </Typography>
+            <Typography color="text.secondary">
+              Total materials worth of ₹{totalMaterials.toLocaleString()}
             </Typography>
           </Box>
         </Grid>
@@ -58,7 +83,6 @@ const DailyExpenses = () => {
                     value={selectedDate}
                     onChange={(newDate) => {
                       setSelectedDate(newDate || new Date())
-                      // clear existing data
                     }}
                     renderInput={(params) => (
                       <TextField {...params} fullWidth />
@@ -66,7 +90,12 @@ const DailyExpenses = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Button variant="text" color="primary" fullWidth>
+                  <Button
+                    variant="text"
+                    color="primary"
+                    fullWidth
+                    href={`?date=${moment(selectedDate).format("YYYY-MM-DD")}`}
+                  >
                     Fetch Data
                   </Button>
                 </Grid>
@@ -78,36 +107,37 @@ const DailyExpenses = () => {
     </Card>
   )
 
-  const expenses = (
+  const expensesDatagrid = (
     <Card>
       <Box p={4}>
         <Typography variant="h4" sx={{ pb: 3 }}>
           All Expenses
         </Typography>
         <DataGrid
-          rows={expenseRows}
+          rows={expenses}
           columns={expenseColDef}
-          hiddenColumns={["createdAt", "updatedAt", "date"]}
+          hiddenColumns={["createdAt", "updatedAt", "_id"]}
         />
       </Box>
     </Card>
   )
 
-  const material = (
+  const materialsDatagrid = (
     <Card>
       <Box p={4}>
         <Typography variant="h4" sx={{ pb: 3 }}>
           All Material
         </Typography>
         <DataGrid
-          rows={materialRows}
+          rows={materials}
           columns={MaterialColDef}
           hiddenColumns={[
+            "_id",
             "createdAt",
             "updatedAt",
             "date",
-            "transportRate",
             "materialRate",
+            "shippingRate",
             "quantity",
           ]}
         />
@@ -136,10 +166,10 @@ const DailyExpenses = () => {
             {dateSelector}
           </Grid>
           <Grid item xs={12}>
-            {expenses}
+            {expensesDatagrid}
           </Grid>
           <Grid item xs={12}>
-            {material}
+            {materialsDatagrid}
           </Grid>
         </Grid>
       </Container>
@@ -149,4 +179,31 @@ const DailyExpenses = () => {
 
 DailyExpenses.layout = SidebarLayout
 
+const getServerSideProps = async ({
+  req,
+  query,
+}: GetServerSidePropsContext) => {
+  let date = new Date(new Date().setHours(0, 0, 0, 0))
+
+  if (query.date) {
+    console.log(query.date)
+    date = new Date(new Date(query.date as string).setHours(0, 0, 0, 0))
+  }
+
+  const expResult = getDailyExpenses(date)
+  const matResult = getDailyMaterials(date)
+
+  const expenses = JSON.parse(JSON.stringify(await expResult))
+  const materials = JSON.parse(JSON.stringify(await matResult))
+
+  return {
+    props: {
+      date: date.toISOString(),
+      expenses,
+      materials,
+    },
+  }
+}
+
+export { getServerSideProps }
 export default DailyExpenses

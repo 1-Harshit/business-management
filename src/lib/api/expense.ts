@@ -16,21 +16,6 @@ const addExpense = async (expense: Expense) => {
   return result
 }
 
-const getExpenses = async () => {
-  const collection = await expenseCollection()
-  const result = await collection.find({}).sort({ date: -1 }).toArray()
-
-  return result as Expense[]
-}
-
-const getExpense = async (id: string) => {
-  const o_id = new ObjectId(id)
-  const collection = await expenseCollection()
-  const result = await collection.findOne({ _id: o_id })
-
-  return result as Expense
-}
-
 const updateExpense = async (expense: Expense) => {
   if (!expense._id) throw new Error("No expense id provided")
   expense.updatedAt = new Date()
@@ -54,4 +39,34 @@ const deleteExpense = async (id: string) => {
   return result
 }
 
-export { addExpense, getExpenses, getExpense, updateExpense, deleteExpense }
+const getExpense = async (id: string) => {
+  const o_id = new ObjectId(id)
+  const collection = await expenseCollection()
+  const result = await collection.findOne({ _id: o_id })
+
+  return result as Expense
+}
+
+const getDailyExpenses = async (date: Date) => {
+  const queryDate = new Date(date)
+
+  const collection = await expenseCollection()
+  const result = await collection
+    .find({
+      date: {
+        $gte: new Date(queryDate),
+        $lt: new Date(queryDate.setDate(date.getDate() + 1)),
+      },
+    })
+    .toArray()
+
+  return result as Expense[]
+}
+
+export {
+  addExpense,
+  updateExpense,
+  deleteExpense,
+  getExpense,
+  getDailyExpenses,
+}

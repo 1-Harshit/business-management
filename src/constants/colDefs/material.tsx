@@ -1,42 +1,52 @@
-import { Typography } from "@mui/material"
+import { Button, Typography } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
 
-import { MIN_WIDTH, gridCell, gridCellTooltip, renderAmount } from "./base"
+import {
+  MIN_WIDTH,
+  formatAmount,
+  formatDate,
+  gridCell,
+  gridCellTooltip,
+} from "./base"
 
 const MaterialColDef: GridColDef[] = [
   {
-    field: "ID",
+    field: "_id",
     headerName: "ID",
     flex: 0.3,
     minWidth: 0.3 * MIN_WIDTH,
-    type: "number",
+    renderCell: (params) => gridCellTooltip(params.value),
   },
   {
     field: "createdAt",
     headerName: "Created At",
-    flex: 0.5,
-    minWidth: 0.5 * MIN_WIDTH,
-    type: "date",
+    flex: 1,
+    minWidth: MIN_WIDTH,
+    valueGetter: (params) => formatDate(params.value),
+    renderCell: (params) => gridCellTooltip(params.value),
   },
   {
     field: "updatedAt",
     headerName: "Updated At",
-    flex: 0.5,
-    minWidth: 0.5 * MIN_WIDTH,
-    type: "date",
+    flex: 1,
+    minWidth: MIN_WIDTH,
+    valueGetter: (params) => formatDate(params.value),
+    renderCell: (params) => gridCellTooltip(params.value),
   },
   {
     field: "date",
     headerName: "Date",
-    flex: 0.8,
-    minWidth: 0.8 * MIN_WIDTH,
-    type: "date",
+    flex: 1,
+    minWidth: MIN_WIDTH,
+    valueGetter: (params) => formatDate(params.value),
+    renderCell: (params) => gridCellTooltip(params.value),
   },
   {
     field: "billNo",
     headerName: "Bill No",
-    flex: 0.7,
-    minWidth: 0.7 * MIN_WIDTH,
+    flex: 0.5,
+    minWidth: 0.5 * MIN_WIDTH,
+    renderCell: (params) => gridCellTooltip(params.value),
   },
   {
     field: "item",
@@ -57,13 +67,13 @@ const MaterialColDef: GridColDef[] = [
   {
     field: "amount",
     headerName: "Amount",
-    flex: 1,
-    minWidth: MIN_WIDTH,
-    renderCell: (params) => renderAmount(params.value),
+    flex: 0.5,
+    minWidth: 0.5 * MIN_WIDTH,
+    renderCell: (params) => formatAmount(params.value),
     valueGetter: (params) => {
       const materialRate = params.row.materialRate || 0
-      const transportRate = params.row.transportRate || 0
-      const rate = materialRate + transportRate
+      const shippingRate = params.row.shippingRate || 0
+      const rate = materialRate + shippingRate
       const quantity = params.row.quantity || 0
       return rate * quantity
     },
@@ -71,16 +81,16 @@ const MaterialColDef: GridColDef[] = [
   {
     field: "site",
     headerName: "Site",
-    flex: 1,
-    minWidth: MIN_WIDTH,
+    flex: 0.75,
+    minWidth: 0.75 * MIN_WIDTH,
     renderCell: (params) => gridCell(params.row.site || {}, "site"),
-    valueGetter: (params) => params.value?.name || "NA",
+    valueGetter: (params) => params.value?.name || "-",
   },
   {
     field: "materialPerson",
     headerName: "Material Person",
-    flex: 1,
-    minWidth: MIN_WIDTH,
+    flex: 0.75,
+    minWidth: 0.75 * MIN_WIDTH,
     renderCell: (params) =>
       gridCell(
         params.row.materialPerson || {},
@@ -90,15 +100,15 @@ const MaterialColDef: GridColDef[] = [
     valueGetter: (params) => params.value?.name || "NA",
   },
   {
-    field: "transportPerson",
-    headerName: "Transport Person",
-    flex: 1,
-    minWidth: MIN_WIDTH,
+    field: "shippingPerson",
+    headerName: "Shipping Person",
+    flex: 0.75,
+    minWidth: 0.75 * MIN_WIDTH,
     renderCell: (params) =>
       gridCell(
-        params.row.transportPerson || {},
+        params.row.shippingPerson || {},
         "person",
-        params.row.transportRate
+        params.row.shippingRate
       ),
     valueGetter: (params) => params.value?.name || "NA",
   },
@@ -110,8 +120,8 @@ const MaterialColDef: GridColDef[] = [
     minWidth: 0.5 * MIN_WIDTH,
   },
   {
-    field: "transportRate",
-    headerName: "Transport Rate",
+    field: "shippingRate",
+    headerName: "Shipping Rate",
     type: "number",
     flex: 0.5,
     minWidth: 0.5 * MIN_WIDTH,
@@ -127,8 +137,19 @@ const MaterialColDef: GridColDef[] = [
     field: "remarks",
     headerName: "Remarks",
     flex: 1,
-    minWidth: 1.1 * MIN_WIDTH,
+    minWidth: MIN_WIDTH,
     renderCell: (params) => gridCellTooltip(params.value),
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    flex: 0.5,
+    minWidth: 0.5 * MIN_WIDTH,
+    renderCell: (params) => (
+      <Button href={`/admin/material?id=${params.id}`} fullWidth>
+        View/Edit
+      </Button>
+    ),
   },
 ]
 
