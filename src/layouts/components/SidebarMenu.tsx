@@ -194,7 +194,7 @@ const SidebarMenu = () => {
               <Button
                 disableRipple
                 onClick={closeSidebar}
-                href="/admin/new/expense"
+                href="/admin/expense/new"
                 startIcon={<PaymentIcon />}
               >
                 Add Expense
@@ -204,7 +204,7 @@ const SidebarMenu = () => {
               <Button
                 disableRipple
                 onClick={closeSidebar}
-                href="/admin/new/material"
+                href="/admin/material/new"
                 startIcon={<LocalShippingIcon />}
               >
                 Add Material
