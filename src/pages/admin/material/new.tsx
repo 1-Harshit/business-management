@@ -1,3 +1,5 @@
+import { RestartAlt, Save } from "@mui/icons-material"
+import { LoadingButton } from "@mui/lab"
 import {
   Autocomplete,
   Box,
@@ -9,48 +11,82 @@ import {
   Typography,
 } from "@mui/material"
 import { DateTimePicker } from "@mui/x-date-pickers"
+import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
-import { Material, Person, Site } from "src/constants/models"
+import { Entity, Material, Person, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
+import { getActivePersons } from "src/lib/api/person"
+import { getActiveSites } from "src/lib/api/site"
+import numWords from "src/lib/words"
 
-const sites: Site[] = [] as Site[]
+interface MaterialNewProps {
+  sites: Site[]
+  persons: Person[]
+}
 
-const persons: Person[] = [] as Person[]
-
-const NewMaterial = () => {
-  const [loading, setLoading] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [selectedSite, setSelectedSite] = useState<Site>()
-  const [selectedMaterialPerson, setSelectedMaterialPerson] = useState<Person>()
-  const [selectedTransportPerson, setSelectedTransportPerson] =
-    useState<Person>()
-  const [values, setValues] = useState<Material>({ quantity: 1 } as Material)
+const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [readOnly, setReadOnly] = useState(false)
+  const [values, setValues] = useState<Material>({
+    date: new Date(),
+    item: "",
+    billNo: "",
+    quantity: 1,
+    remarks: "",
+  } as Material)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    const newValue = name === "amount" ? Number(value) : value
+    const newValue = name.endsWith("Rate") ? Number(value) : value
     setValues({
       ...values,
       [name]: newValue,
     })
   }
 
-  const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
-    (e.target as EventTarget & HTMLDivElement).blur()
-  const handleAddExpense = () => {
-    setLoading(true)
-    // console.log(selectedDate)
-    // console.log(selectedSite)
-    // console.log(selectedPerson)
-    // console.log(values)
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
+  const handleDateChange = (date: Date | null) => {
+    if (!date) return
+    setValues({
+      ...values,
+      date,
+    })
   }
 
+  const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
+    (e.target as EventTarget & HTMLDivElement).blur()
+
+  const handleAddMaterial = async () => {
+    setIsLoading(true)
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }
+
+    const res = await fetch("/api/material", requestOptions)
+    if (res.status === 200) {
+      setValues({
+        ...values,
+        _id: (await res.json())._id,
+      })
+      setReadOnly(true)
+    }
+
+    setIsLoading(false)
+  }
+
+  const props = {
+    fullWidth: true,
+    onChange: handleInputChange,
+    disabled: isLoading,
+    inputProps: {
+      readOnly,
+    },
+  }
   return (
     <>
       <Head>
@@ -77,12 +113,11 @@ const NewMaterial = () => {
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
                     <DateTimePicker
-                      disabled={loading}
-                      label="Pick a date"
-                      value={selectedDate}
-                      onChange={(newDate) => {
-                        setSelectedDate(newDate || new Date())
-                      }}
+                      disabled={isLoading}
+                      readOnly={readOnly}
+                      label="Delivery date"
+                      value={values.date}
+                      onChange={handleDateChange}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />
                       )}
@@ -90,32 +125,26 @@ const NewMaterial = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Material Name"
                       name="item"
-                      onChange={handleInputChange}
                       value={values.item}
+                      {...props}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Bill No."
-                      name="bill_no"
-                      onChange={handleInputChange}
+                      name="billNo"
                       value={values.billNo}
+                      {...props}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Quantity"
                       name="quantity"
-                      onChange={handleInputChange}
                       value={values.quantity}
+                      {...props}
                       type="number"
                       onWheel={handleWheel}
                     />
@@ -123,24 +152,22 @@ const NewMaterial = () => {
 
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Material Rate (in ₹)"
-                      name="material_rate"
-                      onChange={handleInputChange}
-                      value={values.materialP.rate}
+                      name="materialRate"
+                      value={values.materialRate}
+                      helperText={numWords(values.materialRate)}
+                      {...props}
                       type="number"
                       onWheel={handleWheel}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Transport Rate (in ₹)"
-                      name="transport_rate"
-                      onChange={handleInputChange}
-                      value={values.materialP.rate}
+                      name="shippingRate"
+                      value={values.shippingRate}
+                      helperText={numWords(values.shippingRate)}
+                      {...props}
                       type="number"
                       onWheel={handleWheel}
                     />
@@ -148,13 +175,17 @@ const NewMaterial = () => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       disablePortal
-                      disabled={loading}
-                      id="material_person"
+                      disabled={isLoading}
+                      readOnly={readOnly}
+                      id="materialPerson"
                       options={persons}
                       getOptionLabel={(option) => option.name || ""}
-                      value={selectedMaterialPerson}
+                      value={values.materialPerson as Person}
                       onChange={(e, value, r) =>
-                        setSelectedMaterialPerson(value || ({} as Person))
+                        setValues({
+                          ...values,
+                          materialPerson: value as Entity,
+                        })
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Material Person" />
@@ -164,13 +195,17 @@ const NewMaterial = () => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       disablePortal
-                      disabled={loading}
+                      disabled={isLoading}
+                      readOnly={readOnly}
                       id="transport_person"
                       options={persons}
                       getOptionLabel={(option) => option.name || ""}
-                      value={selectedTransportPerson}
+                      value={values.shippingPerson as Person}
                       onChange={(e, value, r) =>
-                        setSelectedTransportPerson(value || ({} as Person))
+                        setValues({
+                          ...values,
+                          shippingPerson: value as Entity,
+                        })
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Transport Person" />
@@ -180,13 +215,17 @@ const NewMaterial = () => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       disablePortal
-                      disabled={loading}
+                      disabled={isLoading}
+                      readOnly={readOnly}
                       id="site"
                       options={sites}
                       getOptionLabel={(option) => option.name || ""}
-                      value={selectedSite}
+                      value={values.site as Site}
                       onChange={(e, value, r) =>
-                        setSelectedSite(value || ({} as Site))
+                        setValues({
+                          ...values,
+                          site: value as Entity,
+                        })
                       }
                       renderInput={(params) => (
                         <TextField {...params} label="Site" />
@@ -195,27 +234,45 @@ const NewMaterial = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
-                      fullWidth
-                      disabled={loading}
                       label="Remarks"
                       name="remarks"
-                      onChange={handleInputChange}
                       value={values.remarks}
+                      {...props}
                     />
                   </Grid>
-                  <Grid item xs={12} md={4} />
                   <Grid item xs={12} md={4}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      disabled={loading}
-                      onClick={handleAddExpense}
-                    >
-                      Add Material
-                    </Button>
+                    {readOnly && (
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        href="/admin/material/new"
+                        startIcon={<RestartAlt />}
+                      >
+                        Add another
+                      </Button>
+                    )}
                   </Grid>
-                  <Grid item xs={12} md={4} />
+                  <Grid item xs={12} md={4}>
+                    {readOnly ? (
+                      <TextField
+                        label="Material ID"
+                        name="_id"
+                        value={values._id}
+                        {...props}
+                      />
+                    ) : (
+                      <LoadingButton
+                        fullWidth
+                        variant="contained"
+                        onClick={handleAddMaterial}
+                        loading={isLoading}
+                        loadingPosition="start"
+                        startIcon={<Save />}
+                      >
+                        Add Material
+                      </LoadingButton>
+                    )}
+                  </Grid>
                 </Grid>
               </Box>
             </Card>
@@ -226,6 +283,32 @@ const NewMaterial = () => {
   )
 }
 
-NewMaterial.layout = SidebarLayout
+MaterialNew.layout = SidebarLayout
 
-export default NewMaterial
+const getServerSideProps = async ({ res }: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
+  const activeSites = await getActiveSites()
+  const sites = JSON.parse(JSON.stringify(activeSites))
+  const activePersons = await getActivePersons()
+  const persons = JSON.parse(JSON.stringify(activePersons))
+
+  if (activeSites.length === 0 && activePersons.length === 0) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: {
+      sites,
+      persons,
+    },
+  }
+}
+
+export { getServerSideProps }
+export default MaterialNew
