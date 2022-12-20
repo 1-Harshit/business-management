@@ -6,13 +6,7 @@ import {
   Button,
   Card,
   Container,
-  FormControl,
   Grid,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material"
@@ -22,52 +16,45 @@ import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
 
 import PageTitle from "src/components/PageTitle"
-import { Entity, Expense, Person, Site } from "src/constants/models"
+import { Entity, Material, Person, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
-import { getExpense } from "src/lib/api/expense"
+import { getMaterial } from "src/lib/api/material"
 import { getActivePersons } from "src/lib/api/person"
 import { getActiveSites } from "src/lib/api/site"
 import numWords from "src/lib/words"
 
-interface NewExpenseProps {
+interface MaterialNewProps {
   sites: Site[]
   persons: Person[]
-  expense: Expense
+  material: Material
 }
 
-const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
+const MaterialEdit = ({ sites, persons, material }: MaterialNewProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [readOnly, setReadOnly] = useState(false)
-  const [values, setValues] = useState<Expense>(expense as Expense)
+  const [values, setValues] = useState<Material>(material)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    const newValue = name === "amount" ? Number(value) : value
+    const newValue = name.endsWith("Rate") ? Number(value) : value
     setValues({
       ...values,
       [name]: newValue,
     })
   }
 
-  const handleSelectChange = (event: SelectChangeEvent) => {
+  const handleDateChange = (date: Date | null) => {
+    if (!date) return
     setValues({
       ...values,
-      mode: event.target.value as string,
-    })
-  }
-
-  const handleDateChange = (newDate: Date | null) => {
-    if (!newDate) return
-    setValues({
-      ...values,
-      date: newDate,
+      date,
     })
   }
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) =>
     (e.target as EventTarget & HTMLDivElement).blur()
 
-  const handleUpdateExpense = async () => {
+  const handleEditMaterial = async () => {
     setIsLoading(true)
 
     const requestOptions = {
@@ -75,19 +62,16 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     }
-    const res = await fetch("/api/expense", requestOptions)
 
+    const res = await fetch("/api/material", requestOptions)
     if (res.status === 200) {
-      setValues({
-        ...values,
-        _id: (await res.json())._id,
-      })
       setReadOnly(true)
     }
+
     setIsLoading(false)
   }
 
-  const handleDeleteExpense = async () => {
+  const handleDeleteMaterial = async () => {
     setReadOnly(true)
     setIsLoading(true)
 
@@ -111,15 +95,14 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
       readOnly,
     },
   }
-
   return (
     <>
       <Head>
-        <title>New Expense</title>
+        <title>New Material</title>
       </Head>
       <PageTitle
-        heading="Edit Expense"
-        subHeading="Edit a new Expense from database"
+        heading="Edit Material"
+        subHeading={`Editing a material with id ${material._id}`}
       />
       <Container maxWidth="lg">
         <Grid
@@ -132,13 +115,13 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
           <Grid item xs={12}>
             <Card>
               <Box px={4} py={3}>
-                <Typography variant="h4">Edit a new expense</Typography>
+                <Typography variant="h4">Edit a material</Typography>
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
                     <DateTimePicker
                       disabled={isLoading}
                       readOnly={readOnly}
-                      label="Date of Expense"
+                      label="Delivery date"
                       value={values.date}
                       onChange={handleDateChange}
                       renderInput={(params) => (
@@ -148,61 +131,101 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      label="Expense Subject"
-                      name="subject"
-                      value={values.subject}
+                      label="Material Name"
+                      name="item"
+                      value={values.item}
                       {...props}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <FormControl fullWidth>
-                      <InputLabel htmlFor="payment-mode">
-                        Payment Mode
-                      </InputLabel>
-                      <Select
-                        disabled={isLoading}
-                        readOnly={readOnly}
-                        id="payment-mode"
-                        value={values.mode}
-                        onChange={handleSelectChange}
-                        name="mode"
-                        label="Payemnt Mode"
-                      >
-                        <MenuItem value="Cash">Cash</MenuItem>
-                        <MenuItem value="UPI">UPI</MenuItem>
-                        <MenuItem value="INB">INB</MenuItem>
-                        <MenuItem value="Other">Other</MenuItem>
-                      </Select>
-                    </FormControl>
+                    <TextField
+                      label="Bill No."
+                      name="billNo"
+                      value={values.billNo}
+                      {...props}
+                    />
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      label="Expense Amount (in ₹)"
-                      name="amount"
-                      value={values.amount}
-                      helperText={numWords(values.amount)}
+                      label="Quantity"
+                      name="quantity"
+                      value={values.quantity}
                       {...props}
                       type="number"
                       onWheel={handleWheel}
                     />
                   </Grid>
-                  <Grid item xs={12} md={8}>
+
+                  <Grid item xs={12} md={4}>
                     <TextField
-                      label="Remarks"
-                      name="remarks"
-                      value={values.remarks}
-                      multiline
+                      label="Material Rate (in ₹)"
+                      name="materialRate"
+                      value={values.materialRate}
+                      helperText={numWords(values.materialRate)}
                       {...props}
+                      type="number"
+                      onWheel={handleWheel}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Transport Rate (in ₹)"
+                      name="shippingRate"
+                      value={values.shippingRate}
+                      helperText={numWords(values.shippingRate)}
+                      {...props}
+                      type="number"
+                      onWheel={handleWheel}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Autocomplete
+                      disablePortal
+                      disabled={isLoading}
+                      readOnly={readOnly}
+                      id="materialPerson"
+                      options={persons}
+                      getOptionLabel={(option) => option.name || ""}
+                      value={values.materialPerson as Person}
+                      onChange={(e, value, r) =>
+                        setValues({
+                          ...values,
+                          materialPerson: value as Entity,
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} label="Material Person" />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Autocomplete
+                      disablePortal
+                      disabled={isLoading}
+                      readOnly={readOnly}
+                      id="transport_person"
+                      options={persons}
+                      getOptionLabel={(option) => option.name || ""}
+                      value={values.shippingPerson as Person}
+                      onChange={(e, value, r) =>
+                        setValues({
+                          ...values,
+                          shippingPerson: value as Entity,
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} label="Transport Person" />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
                     <Autocomplete
                       disablePortal
                       disabled={isLoading}
                       readOnly={readOnly}
                       id="site"
                       options={sites}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={values.site as Site}
                       onChange={(e, value, r) =>
                         setValues({
@@ -215,26 +238,12 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={8}>
-                    <Autocomplete
-                      disablePortal
-                      disabled={isLoading}
-                      readOnly={readOnly}
-                      id="person"
-                      options={persons}
-                      getOptionLabel={(option) =>
-                        option.name ? `${option.name} | ${option.contact}` : ""
-                      }
-                      value={values.person as Person}
-                      onChange={(e, value, r) =>
-                        setValues({
-                          ...values,
-                          person: value as Entity,
-                        })
-                      }
-                      renderInput={(params) => (
-                        <TextField {...params} label="Person" />
-                      )}
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      label="Remarks"
+                      name="remarks"
+                      value={values.remarks}
+                      {...props}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -242,17 +251,17 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       <Button
                         fullWidth
                         variant="contained"
-                        href="/admin/expense/new"
-                        startIcon={<RestartAlt />}
+                        href={`/admin/material?id=${material._id}`}
+                        startIcon={<ArrowBack />}
                       >
-                        Add another
+                        Go back
                       </Button>
                     )}
                   </Grid>
                   <Grid item xs={12} md={4}>
                     {readOnly ? (
                       <TextField
-                        label="Person ID"
+                        label="Material ID"
                         name="_id"
                         value={values._id}
                         {...props}
@@ -261,18 +270,18 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       <LoadingButton
                         fullWidth
                         variant="contained"
-                        onClick={handleUpdateExpense}
+                        onClick={handleEditMaterial}
                         loading={isLoading}
                         loadingPosition="start"
                         startIcon={<Save />}
                       >
-                        Update Expense
+                        Save Material
                       </LoadingButton>
                     )}
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <Button
-                      onClick={handleDeleteExpense}
+                      onClick={handleDeleteMaterial}
                       startIcon={<Delete />}
                       fullWidth
                       variant="outlined"
@@ -291,7 +300,7 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
   )
 }
 
-ExpenseEdit.layout = SidebarLayout
+MaterialEdit.layout = SidebarLayout
 
 const getServerSideProps = async ({
   res,
@@ -314,21 +323,21 @@ const getServerSideProps = async ({
   }
 
   const id = query.id as string
-  if (!id) return { notFound: true }
+  if (!id) return { redirect: { destination: "/admin", permanent: false } }
 
-  const result = await getExpense(id)
+  const result = await getMaterial(id)
   if (!result) return { notFound: true }
 
-  const expense = JSON.parse(JSON.stringify(result))
+  const material = JSON.parse(JSON.stringify(result))
 
   return {
     props: {
       sites,
       persons,
-      expense,
+      material,
     },
   }
 }
 
 export { getServerSideProps }
-export default ExpenseEdit
+export default MaterialEdit
