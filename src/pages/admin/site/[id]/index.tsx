@@ -5,49 +5,62 @@ import Head from "next/head"
 import DataGrid from "src/components/DataGrid"
 import PageTitle from "src/components/PageTitle"
 import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
-import { Site } from "src/constants/models"
+import { Expense, Material, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
+import { getExpensesBySite } from "src/lib/api/expense"
+import { getMaterialsBySite } from "src/lib/api/material"
 import { getSite } from "src/lib/api/site"
 import SiteDetails from "src/views/SiteDetails"
 
 interface SiteIndexProps {
   site: Site
+  expenses: Expense[]
+  materials: Material[]
 }
 
-const SiteIndex = ({ site }: SiteIndexProps) => {
-  const expenses = (
+const getAmount = (material: Material) => {
+  const materialRate = material.materialRate || 0
+  const shippingRate = material.shippingRate || 0
+  const rate = materialRate + shippingRate
+  const quantity = material.quantity || 0
+  return rate * quantity
+}
+
+const SiteIndex = ({ site, expenses, materials }: SiteIndexProps) => {
+  const expensesDatagrid = (
     <Card>
       <Box p={4}>
         <Typography variant="h4" sx={{ pb: 3 }}>
           All Expenses
         </Typography>
         <DataGrid
-          rows={[]}
+          rows={expenses}
           columns={expenseColDef}
-          hiddenColumns={["createdAt", "updatedAt", "site"]}
+          hiddenColumns={["site"]}
         />
+        <Typography variant="h4" sx={{ pt: 3 }}>
+          Total Expenses: ₹
+          {expenses.reduce((a, b) => a + b.amount, 0).toLocaleString()}
+        </Typography>
       </Box>
     </Card>
   )
 
-  const material = (
+  const materialsDatagrid = (
     <Card>
       <Box p={4}>
         <Typography variant="h4" sx={{ pb: 3 }}>
           All Material
         </Typography>
         <DataGrid
-          rows={[]}
+          rows={materials}
           columns={MaterialColDef}
-          hiddenColumns={[
-            "createdAt",
-            "updatedAt",
-            "transportRate",
-            "materialRate",
-            "quantity",
-            "site",
-          ]}
+          hiddenColumns={["shippingRate", "materialRate", "quantity", "site"]}
         />
+        <Typography variant="h4" sx={{ pt: 3 }}>
+          Total Material worth: ₹
+          {materials.reduce((a, b) => a + getAmount(b), 0).toLocaleString()}
+        </Typography>
       </Box>
     </Card>
   )
@@ -69,10 +82,10 @@ const SiteIndex = ({ site }: SiteIndexProps) => {
             <SiteDetails site={site} />
           </Grid>
           <Grid item xs={12}>
-            {expenses}
+            {expensesDatagrid}
           </Grid>
           <Grid item xs={12}>
-            {material}
+            {materialsDatagrid}
           </Grid>
         </Grid>
       </Container>
@@ -99,10 +112,17 @@ export const getServerSideProps = async ({
     }
   }
 
+  const expResult = getExpensesBySite(id)
+  const matResult = getMaterialsBySite(id)
+
   const site = JSON.parse(JSON.stringify(result))
+  const expenses = JSON.parse(JSON.stringify((await expResult) || []))
+  const materials = JSON.parse(JSON.stringify((await matResult) || []))
   return {
     props: {
       site,
+      expenses,
+      materials,
     },
   }
 }
