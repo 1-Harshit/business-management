@@ -126,6 +126,7 @@ const PersonEdit = ({ person }: { person: Person }) => {
             <Grid item xs={12} md={4}>
               <TextField
                 label="Contact"
+                inputMode="tel"
                 name="contact"
                 value={values.contact}
                 {...props}

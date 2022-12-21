@@ -101,6 +101,7 @@ const PersonNew = () => {
                 label="Contact"
                 name="contact"
                 value={values.contact}
+                inputMode="tel"
                 {...props}
               />
             </Grid>

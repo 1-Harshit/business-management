@@ -175,6 +175,7 @@ const Login = () => {
                       value={values.user}
                       onChange={handleChange("user")}
                       disabled={loading}
+                      inputMode="email"
                     />
                     <FormControl variant="outlined" fullWidth>
                       <InputLabel htmlFor="login-password" disabled={loading}>
