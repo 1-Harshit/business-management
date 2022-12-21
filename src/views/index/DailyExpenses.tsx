@@ -17,16 +17,6 @@ import Image from "next/image"
 
 import Text from "src/components/Text"
 
-const AvatarSuccess = styled(Avatar)(
-  ({ theme }) => `
-        background-color: ${theme.colors.success.main};
-        color: ${theme.palette.success.contrastText};
-        width: ${theme.spacing(8)};
-        height: ${theme.spacing(8)};
-        box-shadow: ${theme.colors.shadows.success};
-  `
-)
-
 const ListItemAvatarWrapper = styled(ListItemAvatar)(
   ({ theme }) => `
     min-width: 0;
@@ -53,8 +43,14 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
   `
 )
 
-const DailyExpenses = () => {
-  const c = "₹"
+interface DailyExpensesProps {
+  cash: number
+  upi: number
+  other: number
+}
+
+const DailyExpenses = ({ cash, upi, other }: DailyExpensesProps) => {
+  const total = cash + upi + other
 
   return (
     <Card>
@@ -71,37 +67,15 @@ const DailyExpenses = () => {
             </Typography>
             <Box>
               <Typography variant="h1" gutterBottom>
-                ₹54,584.23
+                ₹{total.toLocaleString()}
               </Typography>
               <Typography
                 variant="h4"
                 fontWeight="normal"
                 color="text.secondary"
               >
-                In cash ₹45,681.48
+                In cash ₹{cash.toLocaleString()}
               </Typography>
-              {/* <Box
-                display="flex"
-                sx={{
-                  py: 4,
-                }}
-                alignItems="center"
-              >
-                <AvatarSuccess
-                  sx={{
-                    mr: 2,
-                  }}
-                  variant="rounded"
-                >
-                  <TrendingUp fontSize="large" />
-                </AvatarSuccess>
-                <Box>
-                  <Typography variant="h4">+ $3,594.00</Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    this month
-                  </Typography>
-                </Box>
-              </Box> */}
             </Box>
             <Grid container spacing={3} pt={3}>
               <Grid sm item>
@@ -110,7 +84,7 @@ const DailyExpenses = () => {
                 </Button>
               </Grid>
               <Grid sm item>
-                <Button fullWidth variant="contained" href="/admin/new/expense">
+                <Button fullWidth variant="contained" href="/admin/expense/new">
                   Add Expense
                 </Button>
               </Grid>
@@ -154,7 +128,7 @@ const DailyExpenses = () => {
                 <ListItemText
                   primary="Cash"
                   primaryTypographyProps={{ variant: "h5", noWrap: true }}
-                  secondary="Cash Expenses"
+                  secondary="Cash Payments"
                   secondaryTypographyProps={{
                     variant: "subtitle2",
                     noWrap: true,
@@ -162,9 +136,9 @@ const DailyExpenses = () => {
                 />
                 <Box alignItems="right" textAlign="right">
                   <Typography align="right" variant="h4" noWrap>
-                    ₹ 53,000.00
+                    ₹ {cash.toLocaleString()}
                   </Typography>
-                  <Text>2.54%</Text>
+                  <Text>{(100 * cash) / total}%</Text>
                 </Box>
               </ListItem>
               <ListItem disableGutters>
@@ -187,9 +161,9 @@ const DailyExpenses = () => {
                 />
                 <Box alignItems="right" textAlign="right">
                   <Typography align="right" variant="h4" noWrap>
-                    ₹ 53,000.00
+                    ₹ {upi.toLocaleString()}
                   </Typography>
-                  <Text>2.54%</Text>
+                  <Text>{(100 * upi) / total}%</Text>
                 </Box>
               </ListItem>
               <ListItem disableGutters>
@@ -212,9 +186,9 @@ const DailyExpenses = () => {
                 />
                 <Box alignItems="right" textAlign="right">
                   <Typography align="right" variant="h4" noWrap>
-                    ₹ 53,000.00
+                    ₹ {other.toLocaleString()}
                   </Typography>
-                  <Text>2.54%</Text>
+                  <Text>{(100 * other) / total}%</Text>
                 </Box>
               </ListItem>
             </List>

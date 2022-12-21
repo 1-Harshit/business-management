@@ -46,6 +46,7 @@ const getMaterial = async (id: string) => {
 
   return result as Material
 }
+
 const getDailyMaterials = async (date: Date) => {
   const queryDate = new Date(date)
 

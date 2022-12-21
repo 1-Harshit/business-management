@@ -40,5 +40,17 @@ const getUser = () => {
   }
 }
 
-export { getUser }
-export default getUser
+const getUserByID = (id: string) => {
+  switch (id) {
+    case "harshit":
+      return users[0]
+    case "manoj":
+      return users[1]
+    case "kiran":
+      return users[2]
+    default:
+      return users[3]
+  }
+}
+
+export { getUser, getUserByID }

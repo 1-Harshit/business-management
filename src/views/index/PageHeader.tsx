@@ -1,12 +1,11 @@
 import { Avatar, Grid, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const PageHeader = () => {
-  const user = {
-    name: "Harshit Raj",
-    avatar: "/static/images/avatars/1.jpg",
-  }
+import { getUserByID } from "src/lib/api/user"
+
+const PageHeader = ({ userid }: { userid: string }) => {
   const theme = useTheme()
+  const user = getUserByID(userid)
 
   return (
     <Grid container alignItems="center">
