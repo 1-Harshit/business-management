@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Grid,
   Hidden,
   Typography,
   styled,
@@ -73,6 +74,9 @@ const Home = () => {
             </Button>
             <Button href="/login" variant="contained" sx={{ ml: 1 }}>
               Login
+            </Button>
+            <Button href="/admin" variant="outlined" sx={{ ml: 1 }}>
+              Admin
             </Button>
           </Box>
         </Container>
