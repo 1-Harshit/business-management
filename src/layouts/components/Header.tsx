@@ -16,6 +16,7 @@ import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone"
 import { SidebarContext } from "src/contexts/SidebarContext"
 
 import HeaderUserbox from "./HeaderUserbox"
+import HeaderMenu from "./HeaderMenu"
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -66,7 +67,7 @@ const Header = () => {
         alignItems="center"
         spacing={2}
       >
-        {/* <HeaderButtons /> */}
+        <HeaderMenu />
       </Stack>
       <Box display="flex" alignItems="center">
         {/* <HeaderButtons /> */}
