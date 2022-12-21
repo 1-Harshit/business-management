@@ -186,7 +186,6 @@ const getServerSideProps = async ({
   let date = new Date(new Date().setHours(0, 0, 0, 0))
 
   if (query.date) {
-    console.log(query.date)
     date = new Date(new Date(query.date as string).setHours(0, 0, 0, 0))
   }
 
