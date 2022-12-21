@@ -12,6 +12,7 @@ import {
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 import Footer from "src/components/Footer"
 
@@ -32,8 +33,20 @@ const MainContent = styled(Box)(
 )
 
 const Home = () => {
+  const [isLoggedin, setIsLoggedin] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const res = await fetch("/api/user")
+      if (res.status === 200) {
+        setIsLoggedin(true)
+      }
+    }
+    checkLogin()
+  }, [])
+
   return (
     <>
       <Head>
@@ -64,20 +77,25 @@ const Home = () => {
               variant="h4"
               color="text.secondary"
               fontWeight="normal"
-              sx={{ mb: 4 }}
+              sx={{ mb: 3 }}
             >
               If you do not have access to this application, please contact{" "}
               <Link href="/credits">Maintainer</Link> of this Application.
             </Typography>
-            <Button href="/credits" variant="outlined" sx={{ ml: 1 }}>
-              Contact Maintainer
-            </Button>
-            <Button href="/login" variant="contained" sx={{ ml: 1 }}>
-              Login
-            </Button>
-            <Button href="/admin" variant="outlined" sx={{ ml: 1 }}>
-              Admin
-            </Button>
+            {isLoggedin ? (
+              <Button href="/admin" variant="contained" sx={{ m: 1 }}>
+                Proceed to Application
+              </Button>
+            ) : (
+              <>
+                <Button href="/credits" variant="outlined" sx={{ m: 1 }}>
+                  Contact Maintainer
+                </Button>
+                <Button href="/login" variant="contained" sx={{ m: 1 }}>
+                  Login
+                </Button>
+              </>
+            )}
           </Box>
         </Container>
       </MainContent>

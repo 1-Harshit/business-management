@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react"
 import {
   Avatar,
@@ -12,8 +13,6 @@ import {
 import { styled } from "@mui/material/styles"
 import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone"
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone"
-
-import { getUser } from "src/lib/api/user"
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -51,10 +50,9 @@ const UserBoxDescription = styled(Typography)(
 )
 
 const HeaderUserbox = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef<any>(null)
   const [isOpen, setOpen] = useState<boolean>(false)
-  const [user, setUser] = useState(getUser())
+  const [user, setUser] = useState<any>()
 
   const handleOpen = (): void => {
     setOpen(true)
@@ -70,20 +68,23 @@ const HeaderUserbox = () => {
   }
 
   useEffect(() => {
-    if (localStorage) {
-      setUser(getUser())
+    const getUser = async () => {
+      const res = await fetch("/api/user")
+      const data = await res.json()
+      setUser(data)
     }
+    getUser()
   }, [])
 
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+        <Avatar variant="rounded" alt={user?.name} src={user?.avatar} />
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">{user?.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {user?.jobtitle}
             </UserBoxDescription>
           </UserBoxText>
         </Hidden>
@@ -105,11 +106,11 @@ const HeaderUserbox = () => {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+          <Avatar variant="rounded" alt={user?.name} src={user?.avatar} />
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">{user?.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {user?.jobtitle}
             </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
