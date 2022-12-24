@@ -77,7 +77,11 @@ const Login = () => {
 
   const handleChange =
     (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value })
+      let { value } = event.target
+      if (prop === "user") {
+        value = value.toLowerCase().trim()
+      }
+      setValues({ ...values, [prop]: value })
     }
 
   const handleClickShowPassword = () => {

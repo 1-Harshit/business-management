@@ -1,4 +1,4 @@
-import { ArrowBack, Delete, RestartAlt, Save } from "@mui/icons-material"
+import { Delete, RestartAlt, Save } from "@mui/icons-material"
 import { LoadingButton } from "@mui/lab"
 import {
   Autocomplete,
@@ -8,7 +8,6 @@ import {
   Container,
   FormControl,
   Grid,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -16,7 +15,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { DatePicker } from "@mui/x-date-pickers"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
@@ -135,11 +134,12 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                 <Typography variant="h4">Edit a new expense</Typography>
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
-                    <DateTimePicker
+                    <DatePicker
                       disabled={isLoading}
                       readOnly={readOnly}
                       label="Date of Expense"
                       value={values.date}
+                      inputFormat="MMM d, yyyy"
                       onChange={handleDateChange}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />
@@ -171,6 +171,9 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                         <MenuItem value="Cash">Cash</MenuItem>
                         <MenuItem value="UPI">UPI</MenuItem>
                         <MenuItem value="INB">INB</MenuItem>
+                        <MenuItem value="DD">DD</MenuItem>
+                        <MenuItem value="ATM">ATM</MenuItem>
+                        <MenuItem value="Cheque">Cheque</MenuItem>
                         <MenuItem value="Other">Other</MenuItem>
                       </Select>
                     </FormControl>

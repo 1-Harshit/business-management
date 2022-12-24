@@ -134,6 +134,7 @@ const SiteEdit = ({ site }: { site: Site }) => {
             <Grid item xs={12} md={4}>
               <DatePicker
                 label="Completion Date"
+                inputFormat="MMM d, yyyy"
                 value={values.completionDate}
                 onChange={(newDate) =>
                   setValues({ ...values, completionDate: newDate as Date })
@@ -154,6 +155,7 @@ const SiteEdit = ({ site }: { site: Site }) => {
             <Grid item xs={12} md={4}>
               <DatePicker
                 label="Agreement Date"
+                inputFormat="MMM d, yyyy"
                 value={values.agreementDate}
                 onChange={(newDate) =>
                   setValues({ ...values, agreementDate: newDate as Date })

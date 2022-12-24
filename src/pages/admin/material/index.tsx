@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { DatePicker } from "@mui/x-date-pickers"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 
@@ -60,9 +60,10 @@ const MaterialIndex = ({ material }: MaterialIndexProps) => {
                 <Typography variant="h4">View a material</Typography>
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
-                    <DateTimePicker
+                    <DatePicker
                       readOnly
                       label="Dilevery Date"
+                      inputFormat="MMM d, yyyy"
                       value={material.date}
                       onChange={(e) => null}
                       renderInput={(params) => (
