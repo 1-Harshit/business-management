@@ -1,14 +1,13 @@
 interface Link {
   title: string
-  type: "site" | "person"
-  _id: string
+  src: string
+  variant?: "contained" | "outlined" | "text"
 }
 
 const links: Link[] = [
   {
     title: "Home",
-    type: "site",
-    _id: "654sees564ds654",
+    src: "/admin/site/63a7096891b8630b4cdce73b",
   },
 ]
 

@@ -1,5 +1,7 @@
 import { Box, Button, Card, Grid, Typography } from "@mui/material"
 
+import quickLinks from "src/constants/quickLinks"
+
 const QuickActions = () => (
   <Card>
     <Box p={4}>
@@ -12,21 +14,17 @@ const QuickActions = () => (
         Quick Links
       </Typography>
       <Grid container spacing={3} pb={3}>
-        <Grid sm item>
-          <Button fullWidth variant="text">
-            Link 1
-          </Button>
-        </Grid>
-        <Grid sm item>
-          <Button fullWidth variant="outlined">
-            Link 3
-          </Button>
-        </Grid>
-        <Grid sm item>
-          <Button fullWidth variant="contained">
-            Link 4
-          </Button>
-        </Grid>
+        {quickLinks.map((link) => (
+          <Grid sm item key={link.src}>
+            <Button
+              fullWidth
+              variant={link.variant || "outlined"}
+              href={link.src}
+            >
+              {link.title}
+            </Button>
+          </Grid>
+        ))}
       </Grid>
     </Box>
   </Card>
