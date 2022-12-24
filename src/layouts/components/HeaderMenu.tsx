@@ -90,7 +90,7 @@ const HeaderMenu = () => {
   }
 
   const linksElement = links.map((link) => (
-    <Link key={link._id} href={`/admin/${link.type}/${link._id}`}>
+    <Link key={link.src} href={link.src}>
       <MenuItem sx={{ px: 3 }}>{link.title}</MenuItem>
     </Link>
   ))
