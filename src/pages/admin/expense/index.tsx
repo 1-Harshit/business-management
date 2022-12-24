@@ -1,4 +1,4 @@
-import { ArrowBack, OpenInNew, RestartAlt } from "@mui/icons-material"
+import { ArrowBack, OpenInNew } from "@mui/icons-material"
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { DatePicker } from "@mui/x-date-pickers"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 
@@ -60,10 +60,11 @@ const ExpenseIndex = ({ expense }: ExpenseIndexProps) => {
                 <Typography variant="h4">View a expense</Typography>
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
-                    <DateTimePicker
+                    <DatePicker
                       readOnly
                       label="Date of Expense"
                       value={expense.date}
+                      inputFormat="MMM d, yyyy"
                       onChange={(e) => null}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />
@@ -93,6 +94,9 @@ const ExpenseIndex = ({ expense }: ExpenseIndexProps) => {
                         <MenuItem value="Cash">Cash</MenuItem>
                         <MenuItem value="UPI">UPI</MenuItem>
                         <MenuItem value="INB">INB</MenuItem>
+                        <MenuItem value="DD">DD</MenuItem>
+                        <MenuItem value="ATM">ATM</MenuItem>
+                        <MenuItem value="Cheque">Cheque</MenuItem>
                         <MenuItem value="Other">Other</MenuItem>
                       </Select>
                     </FormControl>

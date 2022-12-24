@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { DatePicker } from "@mui/x-date-pickers"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 import { ChangeEvent, WheelEvent, useState } from "react"
@@ -112,9 +112,10 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
                 <Typography variant="h4">Add a new material</Typography>
                 <Grid container spacing={2} my={1}>
                   <Grid item xs={12} md={4}>
-                    <DateTimePicker
+                    <DatePicker
                       disabled={isLoading}
                       readOnly={readOnly}
+                      inputFormat="MMM d, yyyy"
                       label="Delivery date"
                       value={values.date}
                       onChange={handleDateChange}

@@ -58,7 +58,7 @@ const formatDate = (date: string) => {
   if (dateObj.toDateString() === now.toDateString())
     return dateObj.toLocaleTimeString()
 
-  return dateObj.toLocaleString()
+  return dateObj.toLocaleDateString()
 }
 
 export { gridCell, gridCellTooltip, formatAmount, formatDate, MIN_WIDTH }
