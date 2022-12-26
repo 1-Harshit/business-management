@@ -180,12 +180,12 @@ const HeaderMenu = () => {
           onClose={handleClose("xs")}
           open={xsIsOpen}
         >
-          <MenuItem sx={{ px: 3 }} href="/admin/expense/new">
-            New Expense
-          </MenuItem>
-          <MenuItem sx={{ px: 3 }} href="/admin/material/new">
-            New Material
-          </MenuItem>
+          <Link href="/admin/expense/new">
+            <MenuItem sx={{ px: 3 }}>New Expense</MenuItem>
+          </Link>
+          <Link href="/admin/material/new">
+            <MenuItem sx={{ px: 3 }}>New Material</MenuItem>
+          </Link>
           {linksElement}
         </Menu>
       </Box>
