@@ -58,6 +58,7 @@ const getDailyMaterials = async (date: Date) => {
         $lt: new Date(queryDate.setDate(date.getDate() + 1)),
       },
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Material[]
@@ -71,6 +72,7 @@ const getMaterialsByPerson = async (personId: string) => {
     .find({
       "materialPerson._id": o_id,
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Material[]
@@ -84,6 +86,7 @@ const getMaterialsByShipper = async (shipperId: string) => {
     .find({
       "shippingPerson._id": o_id,
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Material[]
@@ -97,6 +100,7 @@ const getMaterialsBySite = async (siteId: string) => {
     .find({
       "site._id": o_id,
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Material[]

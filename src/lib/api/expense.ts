@@ -58,6 +58,7 @@ const getDailyExpenses = async (date: Date) => {
         $lt: new Date(queryDate.setDate(date.getDate() + 1)),
       },
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Expense[]
@@ -70,6 +71,7 @@ const getExpensesByPerson = async (personId: string) => {
     .find({
       "person._id": o_id,
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Expense[]
@@ -82,6 +84,7 @@ const getExpensesBySite = async (siteId: string) => {
     .find({
       "site._id": o_id,
     })
+    .sort({ date: -1 })
     .toArray()
 
   return result as Expense[]
