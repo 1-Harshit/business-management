@@ -207,7 +207,7 @@ const getServerSideProps = async ({
   if (!id) return { redirect: { destination: "/admin", permanent: false } }
 
   const result = await getExpense(id)
-  if (!result) return { notFound: true }
+  if (result === null) return { notFound: true }
 
   const expense = JSON.parse(JSON.stringify(result))
   return {

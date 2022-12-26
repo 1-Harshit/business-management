@@ -227,7 +227,7 @@ const getServerSideProps = async ({
   if (!id) return { redirect: { destination: "/admin", permanent: false } }
 
   const result = await getMaterial(id)
-  if (!result) return { notFound: true }
+  if (result === null) return { notFound: true }
 
   const material = JSON.parse(JSON.stringify(result))
   return {
