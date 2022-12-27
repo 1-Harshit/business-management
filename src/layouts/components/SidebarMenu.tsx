@@ -14,6 +14,7 @@ import FilterVintageTwoToneIcon from "@mui/icons-material/FilterVintageTwoTone"
 import LocationCircleTwoToneIcon from "@mui/icons-material/LocationCity"
 import LocalShippingIcon from "@mui/icons-material/LocalShipping"
 import PaymentIcon from "@mui/icons-material/Payment"
+import { History } from "@mui/icons-material"
 
 import { SidebarContext } from "src/contexts/SidebarContext"
 
@@ -264,6 +265,29 @@ const SidebarMenu = () => {
                 startIcon={<AccountCircleTwoToneIcon />}
               >
                 Person Wise Expenses
+              </Button>
+            </ListItem>
+          </List>
+        </SubMenuWrapper>
+      </List>
+      <List
+        component="div"
+        subheader={
+          <ListSubheader component="div" disableSticky>
+            History
+          </ListSubheader>
+        }
+      >
+        <SubMenuWrapper>
+          <List component="div">
+            <ListItem component="div">
+              <Button
+                disableRipple
+                onClick={closeSidebar}
+                href="/admin/recent"
+                startIcon={<History />}
+              >
+                Recent Activity
               </Button>
             </ListItem>
           </List>

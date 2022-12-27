@@ -58,4 +58,22 @@ const updatePerson = async (person: Person) => {
   return result
 }
 
-export { addPerson, getPersons, getPerson, getActivePersons, updatePerson }
+const getRecentPersons = async (count: number) => {
+  const collection = await personCollection()
+  const result = await collection
+    .find({})
+    .sort({ updatedAt: -1 })
+    .limit(count)
+    .toArray()
+
+  return result as Person[]
+}
+
+export {
+  addPerson,
+  getPersons,
+  getPerson,
+  getActivePersons,
+  updatePerson,
+  getRecentPersons,
+}

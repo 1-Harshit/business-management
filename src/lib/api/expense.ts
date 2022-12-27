@@ -90,6 +90,17 @@ const getExpensesBySite = async (siteId: string) => {
   return result as Expense[]
 }
 
+const getRecentExpenses = async (count: number) => {
+  const collection = await expenseCollection()
+  const result = await collection
+    .find()
+    .sort({ updatedAt: -1 })
+    .limit(count)
+    .toArray()
+
+  return result as Expense[]
+}
+
 export {
   addExpense,
   updateExpense,
@@ -98,4 +109,5 @@ export {
   getDailyExpenses,
   getExpensesByPerson,
   getExpensesBySite,
+  getRecentExpenses,
 }

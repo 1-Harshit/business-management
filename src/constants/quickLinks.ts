@@ -6,6 +6,10 @@ interface Link {
 
 const links: Link[] = [
   {
+    title: "History",
+    src: "/admin/recent",
+  },
+  {
     title: "Home",
     src: "/admin/site/63a7096891b8630b4cdce73b",
   },

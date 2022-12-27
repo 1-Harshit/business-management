@@ -106,6 +106,17 @@ const getMaterialsBySite = async (siteId: string) => {
   return result as Material[]
 }
 
+const getRecentMaterial = async (count: number) => {
+  const collection = await materialCollection()
+  const result = await collection
+    .find()
+    .sort({ updatedAt: -1 })
+    .limit(count)
+    .toArray()
+
+  return result as Material[]
+}
+
 export {
   addMaterial,
   updateMaterial,
@@ -115,4 +126,5 @@ export {
   getMaterialsByPerson,
   getMaterialsByShipper,
   getMaterialsBySite,
+  getRecentMaterial,
 }

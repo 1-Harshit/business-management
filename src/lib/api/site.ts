@@ -55,4 +55,22 @@ const updateSite = async (site: Site) => {
   return result
 }
 
-export { addSite, getSites, getSite, getActiveSites, updateSite }
+const getRecentSites = async (count: number) => {
+  const collection = await siteCollection()
+  const result = await collection
+    .find({})
+    .sort({ createdAt: -1 })
+    .limit(count)
+    .toArray()
+
+  return result as Site[]
+}
+
+export {
+  addSite,
+  getSites,
+  getSite,
+  getActiveSites,
+  updateSite,
+  getRecentSites,
+}
