@@ -72,6 +72,11 @@ const getServerSidePropsHandler = async ({
   req,
   res,
 }: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
   const { user } = req.session
 
   let date = new Date(new Date().setHours(0, 0, 0, 0))

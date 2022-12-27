@@ -181,9 +181,14 @@ const DailyExpenses = ({ date, expenses, materials }: DailyExpensesProps) => {
 DailyExpenses.layout = SidebarLayout
 
 const getServerSideProps = async ({
-  req,
+  res,
   query,
 }: GetServerSidePropsContext) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  )
+
   let date = new Date(new Date().setHours(0, 0, 0, 0))
 
   if (query.date) {
