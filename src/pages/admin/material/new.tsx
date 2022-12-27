@@ -27,6 +27,17 @@ interface MaterialNewProps {
   persons: Person[]
 }
 
+const getAmount = (material: Material) => {
+  const materialRate = material.materialRate || 0
+  const shippingRate = material.shippingRate || 0
+  const rate = materialRate + shippingRate
+  const quantity = material.quantity || 0
+  const totalAmount = rate * quantity
+  const materialAmount = materialRate * quantity
+  const shippingAmount = shippingRate * quantity
+  return { totalAmount, materialAmount, shippingAmount }
+}
+
 const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [readOnly, setReadOnly] = useState(false)
@@ -34,7 +45,6 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
     date: new Date(),
     item: "",
     billNo: "",
-    quantity: 1,
     remarks: "",
   } as Material)
 
@@ -164,7 +174,7 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      label="Transport Rate (in ₹)"
+                      label="Shipping Rate (in ₹)"
                       name="shippingRate"
                       value={values.shippingRate}
                       helperText={numWords(values.shippingRate)}
@@ -198,7 +208,7 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
                       disablePortal
                       disabled={isLoading}
                       readOnly={readOnly}
-                      id="transport_person"
+                      id="shipping_person"
                       options={persons}
                       getOptionLabel={(option) => option.name || ""}
                       value={values.shippingPerson as Person}
@@ -209,7 +219,7 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
                         })
                       }
                       renderInput={(params) => (
-                        <TextField {...params} label="Transport Person" />
+                        <TextField {...params} label="Shipping Person" />
                       )}
                     />
                   </Grid>
@@ -239,6 +249,39 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
                       name="remarks"
                       value={values.remarks}
                       {...props}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Material Amount (in ₹)"
+                      value={getAmount(values).materialAmount}
+                      helperText={numWords(getAmount(values).materialAmount)}
+                      {...props}
+                      inputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Shipping Amount (in ₹)"
+                      value={getAmount(values).shippingAmount}
+                      helperText={numWords(getAmount(values).shippingAmount)}
+                      {...props}
+                      inputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Amount (in ₹)"
+                      value={getAmount(values).totalAmount}
+                      helperText={numWords(getAmount(values).totalAmount)}
+                      {...props}
+                      inputProps={{
+                        readOnly: true,
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
