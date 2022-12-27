@@ -21,19 +21,15 @@ import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
 import { getDailyExpenses } from "src/lib/api/expense"
 import { getDailyMaterials } from "src/lib/api/material"
 
+import { getAmount } from "./material"
+
 interface DailyExpensesProps {
   date: string
   expenses: Expense[]
   materials: Material[]
 }
 
-const getAmount = (material: Material) => {
-  const materialRate = material.materialRate || 0
-  const shippingRate = material.shippingRate || 0
-  const rate = materialRate + shippingRate
-  const quantity = material.quantity || 0
-  return rate * quantity
-}
+const getTotalAmount = (material: Material) => getAmount(material).totalAmount
 
 const DailyExpenses = ({ date, expenses, materials }: DailyExpensesProps) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(date))
@@ -44,7 +40,7 @@ const DailyExpenses = ({ date, expenses, materials }: DailyExpensesProps) => {
   )
 
   const totalMaterials = materials.reduce(
-    (acc, curr) => acc + getAmount(curr),
+    (acc, curr) => acc + getTotalAmount(curr),
     0
   )
 
@@ -198,8 +194,8 @@ const getServerSideProps = async ({
   const expResult = getDailyExpenses(date)
   const matResult = getDailyMaterials(date)
 
-  const expenses = JSON.parse(JSON.stringify(await expResult))
-  const materials = JSON.parse(JSON.stringify(await matResult))
+  const expenses = JSON.parse(JSON.stringify((await expResult) || []))
+  const materials = JSON.parse(JSON.stringify((await matResult) || []))
 
   return {
     props: {

@@ -22,20 +22,11 @@ import { getActivePersons } from "src/lib/api/person"
 import { getActiveSites } from "src/lib/api/site"
 import numWords from "src/lib/words"
 
+import { getAmount } from "."
+
 interface MaterialNewProps {
   sites: Site[]
   persons: Person[]
-}
-
-const getAmount = (material: Material) => {
-  const materialRate = material.materialRate || 0
-  const shippingRate = material.shippingRate || 0
-  const rate = materialRate + shippingRate
-  const quantity = material.quantity || 0
-  const totalAmount = rate * quantity
-  const materialAmount = materialRate * quantity
-  const shippingAmount = shippingRate * quantity
-  return { totalAmount, materialAmount, shippingAmount }
 }
 
 const MaterialNew = ({ sites, persons }: MaterialNewProps) => {

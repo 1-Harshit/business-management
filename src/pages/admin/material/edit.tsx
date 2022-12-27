@@ -23,6 +23,8 @@ import { getActivePersons } from "src/lib/api/person"
 import { getActiveSites } from "src/lib/api/site"
 import numWords from "src/lib/words"
 
+import { getAmount } from "."
+
 interface MaterialNewProps {
   sites: Site[]
   persons: Person[]
@@ -245,6 +247,39 @@ const MaterialEdit = ({ sites, persons, material }: MaterialNewProps) => {
                       name="remarks"
                       value={values.remarks}
                       {...props}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Material Amount (in ₹)"
+                      value={getAmount(values).materialAmount}
+                      helperText={numWords(getAmount(values).materialAmount)}
+                      {...props}
+                      inputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Shipping Amount (in ₹)"
+                      value={getAmount(values).shippingAmount}
+                      helperText={numWords(getAmount(values).shippingAmount)}
+                      {...props}
+                      inputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Amount (in ₹)"
+                      value={getAmount(values).totalAmount}
+                      helperText={numWords(getAmount(values).totalAmount)}
+                      {...props}
+                      inputProps={{
+                        readOnly: true,
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>

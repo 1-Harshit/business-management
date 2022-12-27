@@ -23,6 +23,17 @@ import SidebarLayout from "src/layouts/SidebarLayout"
 import { getMaterial } from "src/lib/api/material"
 import numWords from "src/lib/words"
 
+export const getAmount = (material: Material) => {
+  const materialRate = material.materialRate || 0
+  const shippingRate = material.shippingRate || 0
+  const rate = materialRate + shippingRate
+  const quantity = material.quantity || 0
+  const totalAmount = rate * quantity
+  const materialAmount = materialRate * quantity
+  const shippingAmount = shippingRate * quantity
+  return { totalAmount, materialAmount, shippingAmount }
+}
+
 interface MaterialIndexProps {
   material: Material
 }
@@ -166,7 +177,28 @@ const MaterialIndex = ({ material }: MaterialIndexProps) => {
                       {...props}
                     />
                   </Grid>
-
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Material Amount (in ₹)"
+                      value={numWords(getAmount(material).materialAmount)}
+                      {...props}
+                      multiline
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Shipping Amount (in ₹)"
+                      value={numWords(getAmount(material).shippingAmount)}
+                      {...props}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Total Amount (in ₹)"
+                      value={numWords(getAmount(material).totalAmount)}
+                      {...props}
+                    />
+                  </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
                       label="Created At"

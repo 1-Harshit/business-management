@@ -12,19 +12,15 @@ import { getMaterialsBySite } from "src/lib/api/material"
 import { getSite } from "src/lib/api/site"
 import SiteDetails from "src/views/SiteDetails"
 
+import { getAmount } from "../../material"
+
 interface SiteIndexProps {
   site: Site
   expenses: Expense[]
   materials: Material[]
 }
 
-const getAmount = (material: Material) => {
-  const materialRate = material.materialRate || 0
-  const shippingRate = material.shippingRate || 0
-  const rate = materialRate + shippingRate
-  const quantity = material.quantity || 0
-  return rate * quantity
-}
+const getTotalAmount = (material: Material) => getAmount(material).totalAmount
 
 const SiteIndex = ({ site, expenses, materials }: SiteIndexProps) => {
   const expensesDatagrid = (
@@ -59,7 +55,9 @@ const SiteIndex = ({ site, expenses, materials }: SiteIndexProps) => {
         />
         <Typography variant="h4" sx={{ pt: 3 }}>
           Total Material worth: ₹
-          {materials.reduce((a, b) => a + getAmount(b), 0).toLocaleString()}
+          {materials
+            .reduce((a, b) => a + getTotalAmount(b), 0)
+            .toLocaleString()}
         </Typography>
       </Box>
     </Card>
