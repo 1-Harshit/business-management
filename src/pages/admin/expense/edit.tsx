@@ -1,4 +1,4 @@
-import { Delete, RestartAlt, Save } from "@mui/icons-material"
+import { ArrowBack, Delete, RestartAlt, Save } from "@mui/icons-material"
 import { LoadingButton } from "@mui/lab"
 import {
   Autocomplete,
@@ -245,10 +245,10 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       <Button
                         fullWidth
                         variant="contained"
-                        href="/admin/expense/new"
-                        startIcon={<RestartAlt />}
+                        href={`/admin/expense?id=${values._id}`}
+                        startIcon={<ArrowBack />}
                       >
-                        Add another
+                        Go Back
                       </Button>
                     )}
                   </Grid>

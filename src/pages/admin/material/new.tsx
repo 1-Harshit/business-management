@@ -308,6 +308,17 @@ const MaterialNew = ({ sites, persons }: MaterialNewProps) => {
                       </LoadingButton>
                     )}
                   </Grid>
+                  <Grid item xs={12} md={4}>
+                    {readOnly && (
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        href={`/admin/material?id=${values._id}`}
+                      >
+                        View/Edit
+                      </Button>
+                    )}
+                  </Grid>
                 </Grid>
               </Box>
             </Card>

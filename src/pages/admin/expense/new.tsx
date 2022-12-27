@@ -260,7 +260,17 @@ const ExpenseNew = ({ sites, persons }: NewExpenseProps) => {
                       </LoadingButton>
                     )}
                   </Grid>
-                  <Grid item xs={12} md={4} />
+                  <Grid item xs={12} md={4}>
+                    {readOnly && (
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        href={`/admin/expense?id=${values._id}`}
+                      >
+                        View/Edit
+                      </Button>
+                    )}
+                  </Grid>
                 </Grid>
               </Box>
             </Card>
