@@ -26,11 +26,10 @@ import numWords from "src/lib/words"
 export const getAmount = (material: Material) => {
   const materialRate = material.materialRate || 0
   const shippingRate = material.shippingRate || 0
-  const rate = materialRate + shippingRate
   const quantity = material.quantity || 0
-  const totalAmount = rate * quantity
   const materialAmount = materialRate * quantity
   const shippingAmount = shippingRate * quantity
+  const totalAmount = materialAmount + shippingAmount
   return { totalAmount, materialAmount, shippingAmount }
 }
 

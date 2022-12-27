@@ -5,11 +5,21 @@ import moment from "moment"
 const MIN_WIDTH = 175
 
 // Render Amount in format ₹1,56,756.56
-const formatAmount = (amount: string | number) =>
-  `₹${Number(amount).toLocaleString("en-IN", {
+const formatAmount = (amount: string | number) => {
+  const num = Number(amount)
+  if (Number.isNaN(num)) return amount
+
+  if (Number.isInteger(num))
+    return `₹${num.toLocaleString("en-IN", {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    })}`
+
+  return `₹${num.toLocaleString("en-IN", {
     maximumFractionDigits: 2,
-    minimumFractionDigits: 0,
+    minimumFractionDigits: 2,
   })}`
+}
 
 // Cell with link and rate
 const gridCell = (

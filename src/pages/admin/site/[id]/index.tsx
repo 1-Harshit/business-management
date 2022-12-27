@@ -5,6 +5,7 @@ import Head from "next/head"
 import DataGrid from "src/components/DataGrid"
 import PageTitle from "src/components/PageTitle"
 import { MaterialColDef, expenseColDef } from "src/constants/colDefs"
+import { formatAmount } from "src/constants/colDefs/base"
 import { Expense, Material, Site } from "src/constants/models"
 import SidebarLayout from "src/layouts/SidebarLayout"
 import { getExpensesBySite } from "src/lib/api/expense"
@@ -20,9 +21,16 @@ interface SiteIndexProps {
   materials: Material[]
 }
 
-const getTotalAmount = (material: Material) => getAmount(material).totalAmount
-
 const SiteIndex = ({ site, expenses, materials }: SiteIndexProps) => {
+  const totalExpenses = expenses.reduce(
+    (a, b) => a + (Number.isNaN(Number(b.amount)) ? 0 : Number(b.amount)),
+    0
+  )
+  const totalMaterials = materials.reduce(
+    (a, b) => a + getAmount(b).totalAmount,
+    0
+  )
+
   const expensesDatagrid = (
     <Card>
       <Box p={4}>
@@ -35,8 +43,7 @@ const SiteIndex = ({ site, expenses, materials }: SiteIndexProps) => {
           hiddenColumns={["site"]}
         />
         <Typography variant="h4" sx={{ pt: 3 }}>
-          Total Expenses: ₹
-          {expenses.reduce((a, b) => a + b.amount, 0).toLocaleString()}
+          Total Expenses: {formatAmount(totalExpenses)}
         </Typography>
       </Box>
     </Card>
@@ -54,10 +61,7 @@ const SiteIndex = ({ site, expenses, materials }: SiteIndexProps) => {
           hiddenColumns={["shippingRate", "materialRate", "quantity", "site"]}
         />
         <Typography variant="h4" sx={{ pt: 3 }}>
-          Total Material worth: ₹
-          {materials
-            .reduce((a, b) => a + getTotalAmount(b), 0)
-            .toLocaleString()}
+          Total Material worth: {formatAmount(totalMaterials)}
         </Typography>
       </Box>
     </Card>
