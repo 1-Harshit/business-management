@@ -139,7 +139,7 @@ const ExpenseEdit = ({ sites, persons, expense }: NewExpenseProps) => {
                       readOnly={readOnly}
                       label="Date of Expense"
                       value={values.date}
-                      inputFormat="MMM d, yyyy"
+                      inputFormat="d MMM yyyy"
                       onChange={handleDateChange}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />

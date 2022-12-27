@@ -1,5 +1,6 @@
 import { Grid, IconButton, Tooltip, Typography } from "@mui/material"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import moment from "moment"
 
 const MIN_WIDTH = 175
 
@@ -58,7 +59,7 @@ const formatDate = (date: string) => {
   if (dateObj.toDateString() === now.toDateString())
     return dateObj.toLocaleTimeString()
 
-  return dateObj.toLocaleDateString()
+  return moment(dateObj).format("DD MMM YYYY")
 }
 
 export { gridCell, gridCellTooltip, formatAmount, formatDate, MIN_WIDTH }

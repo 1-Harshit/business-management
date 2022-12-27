@@ -64,7 +64,7 @@ const ExpenseIndex = ({ expense }: ExpenseIndexProps) => {
                       readOnly
                       label="Date of Expense"
                       value={expense.date}
-                      inputFormat="MMM d, yyyy"
+                      inputFormat="d MMM yyyy"
                       onChange={(e) => null}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />

@@ -123,7 +123,7 @@ const MaterialEdit = ({ sites, persons, material }: MaterialNewProps) => {
                     <DatePicker
                       disabled={isLoading}
                       readOnly={readOnly}
-                      inputFormat="MMM d, yyyy"
+                      inputFormat="d MMM yyyy"
                       label="Delivery date"
                       value={values.date}
                       onChange={handleDateChange}

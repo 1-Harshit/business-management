@@ -74,7 +74,7 @@ const MaterialIndex = ({ material }: MaterialIndexProps) => {
                     <DatePicker
                       readOnly
                       label="Dilevery Date"
-                      inputFormat="MMM d, yyyy"
+                      inputFormat="d MMM yyyy"
                       value={material.date}
                       onChange={(e) => null}
                       renderInput={(params) => (

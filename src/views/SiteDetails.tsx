@@ -74,7 +74,7 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
         <Grid item xs={12} md={4}>
           <DatePicker
             label="Completion Date"
-            inputFormat="MMM d, yyyy"
+            inputFormat="d MMM yyyy"
             value={site.completionDate}
             onChange={(n) => null}
             renderInput={(params) => <TextField {...params} fullWidth />}
@@ -94,7 +94,7 @@ const SiteDetails = ({ site }: SiteDetailsProps) => {
           <DatePicker
             label="Agreement Date"
             value={site.agreementDate}
-            inputFormat="MMM d, yyyy"
+            inputFormat="d MMM yyyy"
             onChange={(n) => null}
             renderInput={(params) => <TextField {...params} fullWidth />}
             readOnly

@@ -80,7 +80,7 @@ const DailyExpenses = ({ date, expenses, materials }: DailyExpensesProps) => {
                     onChange={(newDate) => {
                       setSelectedDate(newDate || new Date())
                     }}
-                    inputFormat="MMM d, yyyy"
+                    inputFormat="d MMM yyyy"
                     renderInput={(params) => (
                       <TextField {...params} fullWidth />
                     )}

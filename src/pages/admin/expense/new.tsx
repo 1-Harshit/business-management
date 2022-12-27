@@ -124,7 +124,7 @@ const ExpenseNew = ({ sites, persons }: NewExpenseProps) => {
                     <DatePicker
                       disabled={isLoading}
                       readOnly={readOnly}
-                      inputFormat="MMM d, yyyy"
+                      inputFormat="d MMM yyyy"
                       label="Date of Expense"
                       value={values.date}
                       onChange={handleDateChange}
