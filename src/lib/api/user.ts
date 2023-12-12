@@ -15,6 +15,11 @@ const users = [
     jobtitle: "Partner PSE",
   },
   {
+    name: "Vaibhav Raj",
+    avatar: "/static/images/avatars/invalid.jpg",
+    jobtitle: "COO, PSE",
+  },
+  {
     name: "Invalid",
     avatar: "/static/images/avatars/invalid.jpg",
     jobtitle: "Imposter",

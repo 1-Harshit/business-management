@@ -13,7 +13,7 @@ const handler = async (
   }
 
   const user = req.body.user as string
-  if (user !== "harshit" && user !== "manoj" && user !== "kiran") {
+  if (user !== "harshit" && user !== "manoj" && user !== "kiran" && user !== "vaibhav") {
     res.status(400).json({ error: "user not registered, contact maintainer" })
     return
   }
